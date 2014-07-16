@@ -1,0 +1,234 @@
+/* app css stylesheet */
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+
+/*************/
+.float_lft {
+    float: left;
+}
+
+#coords {
+  /*width: 800px;*/
+ width: 100%;
+  position: static;
+}
+#editRegion {
+  float:left;
+  width: 500px;
+  padding:5px;
+}
+#paper {
+  float:left;
+}
+#coordsList {
+  width: 100%;
+  position: static;
+  
+  float:left;
+}
+
+li.coordsText {
+  width: 100%;
+  height: 30px;
+  list-style: none;
+  
+  float:left;
+}
+
+.coords {
+  width: 100%;
+  height: 90px;
+}
+.editRegionRow_short {
+  width: 100%;
+  height: 24px;
+  
+  float:left;
+  
+  font-size: 12px;
+  line-height: 24px;
+}
+.editRegionRow {
+  width: 100%;
+  height: 60px;
+  
+  float:left;
+  position: relative;
+}
+.editRegionRow .divFormLong {
+  width: 115px;
+  height: 100%;
+  float:left;
+  
+  padding: 17px 3px 4px 3px;
+}
+.editRegionRow .divForm_Xlong {
+    width: 180px;
+}
+.editRegionRow .divForm_long {
+    width: 150px;
+}
+.editRegionRow .divForm_med {
+
+}
+.editRegionRow .divForm {
+    width: 70px;
+}
+.editRegionRow .divForm,
+.editRegionRow .divForm_med,
+.editRegionRow .divForm_long,
+.editRegionRow .divForm_Xlong {
+  padding: 4px 0px 4px 0px;
+  margin: 10px;
+  height: 100%;
+  float: left;
+}
+.coord_input{
+    width:45px;
+}
+.flag_input{
+    width:25px;
+}
+.editRegionRow .divForm input {
+  width: 46px;
+}
+.divForm_row{
+    width: 100%
+}
+
+.coordsTable, 
+.coordsTable td {
+  border: 3px solid black;
+}
+.coordsTable {
+  float:left;
+}
+
+/******/
+.tempButton{
+
+  
+  /*width: 150px;*/
+  height: 40px;
+}
+.red_Button {
+  background-color: rgba(237, 116, 116, 1);
+  
+  background-image: linear-gradient(top, rgba(238,130,130,1) 80%, rgba(213, 104,104,1) 100%);
+  
+  /*box shadow */  
+  box-shadow: 0px 1px 3px 0px rgba(136, 136, 136, 1);
+}
+.blue_Button {
+  background-color: rgba(53, 178, 192, 1);
+  
+  background-image: linear-gradient(top, rgba(73, 185, 198,1) 80%, rgba(48, 160, 172,1) 100%);
+  
+  /*box shadow */ 
+ box-shadow: 0px 1px 3px 0px rgba(136, 136, 136, 1);
+}
+
+.red_Button:hover {
+  background-color: none;  /*TODO: Discuss this - he might mean transparent*/
+  background-image: none;
+  
+  /*box shadow */ 
+  box-shadow: none;
+}
+.blue_Button:hover {
+  background-color: rgba(0, 155, 176, 1);
+  background-image: none;
+  
+  /*box shadow */ 
+ box-shadow: none;
+}
+
+.red_Button,
+.blue_Button {
+  border-radius: 3px;
+  
+  width: 100px;
+  padding:8px;
+  display:inline-block;
+  font-size:14px;
+  line-height: 20px;
+  text-align: center;
+  color: rgba(255,255,255);
+  /*text-transform: uppercase;*/
+  
+  color:#FFFFFF;
+}
+.modes_region {
+    margin-top:15px;
+}
+
+.add_point_button {
+    margin-left: 30px;
+}
+
+.fromButton {
+  width: 180px;
+}
+.formAlert {
+  /*display:none;*/
+}
+.editRegionRow .formAlert {
+  width:  132px;
+  height: 54px;
+  margin: 5px 0 0 5px;
+  padding:5px;
+  
+  background: #CD5C5C;  /*GUESS!!*/
+  border-radius: 3px;
+  
+  font-size: 15px;
+  color: #FFFFFF;
+  
+  position: absolute;
+  right:0;
+  top: -8px;
+}
+
+/******/
+.clearer {
+  clear: both;
+  width: 0px;
+  height: 0px;
+  
+  list-style: none;
+}
+.clearerSilent {
+  clear: both;
+}
+
+.debug_region {
+    width: 100%
+}

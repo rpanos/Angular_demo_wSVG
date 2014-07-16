@@ -1,0 +1,16 @@
+<p>This is the partial for view 2.</p>
+<p>
+  Showing of 'interpolate' filter:
+  {{ 'Current version is v%VERSION%.' | interpolate }}
+  <br /><!--<input type="button" id="submit" value="{{pathModeLabel}}" class="red_Button {{pathModeClass}}" ng-click="togglePathMode(true)"/>-->
+  
+  
+  <input type="button" id="submit" value="{{pathModeLabel}}" class="red_Button {{pathModeClass}}" ng-click="togglePathMode(true)"/>
+  
+  <option value=true>Path Mode</option>
+  <option value=false>NOT Path Mode</option>
+</p>
+
+
+
+ng-change="checkForm()"
