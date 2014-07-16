@@ -7,9 +7,9 @@
  * THIS GLOBAL and naughty
  * 
  */
-function isEmpty(value) {
-  return angular.isUndefined(value) || value === '' || value === null || value !== value;
-}
+//function isEmpty(value) {
+//  return angular.isUndefined(value) || value === '' || value === null || value !== value;
+//}
 
 angular.module('myApp.directives', []).
   directive('appVersion', ['version', function(version) {
@@ -18,7 +18,7 @@ angular.module('myApp.directives', []).
     };
     
 
-  }]).directive('ngMin', function() {
+  }]).directive('ngMin', ['utilService', function( utilService){
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -28,7 +28,7 @@ angular.module('myApp.directives', []).
             });
             var minValidator = function(value) {
               var min = scope.$eval(attr.ngMin) || 0;
-              if (!isEmpty(value) && value < min) {
+              if (!utilService.isEmpty(value) && value < min) {
                 ctrl.$setValidity('ngMin', false);
                 return undefined;
               } else {
@@ -41,7 +41,7 @@ angular.module('myApp.directives', []).
             ctrl.$formatters.push(minValidator);
         }
     };
-  }).directive('ngMax', function() {
+  }]).directive('ngMax', ['utilService', function( utilService){
       return {
           restrict: 'A',
           require: 'ngModel',
@@ -51,7 +51,7 @@ angular.module('myApp.directives', []).
               });
               var maxValidator = function(value) {
                 var max = scope.$eval(attr.ngMax) || Infinity;
-                if (!isEmpty(value) && value > max) {
+                if (!utilService.isEmpty(value) && value > max) {
                   ctrl.$setValidity('ngMax', false);
                   return undefined;
                 } else {
@@ -64,7 +64,7 @@ angular.module('myApp.directives', []).
               ctrl.$formatters.push(maxValidator);
           }
       };
-  });
+  }]);
 
 
 

@@ -6,6 +6,13 @@
 // Demonstrate how to register services
 // In this case it is a simple value service.
 angular.module('myApp.services', []).
+  factory('utilService', function() {
+    return {
+        isEmpty: function(value) {
+            return angular.isUndefined(value) || value === '' || value === null || value !== value;
+        }
+    }
+  }).
   factory('arcCalcService', function(){
 
         var funcs = {};

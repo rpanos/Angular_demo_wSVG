@@ -211,7 +211,7 @@ angular.module('myApp.controllers', []).
 
                     console.log("PT 1 at:" + x1 + ", " + y1 + " w " + $scope.slope);
 
-                    //if (y1 > y2) {  //points right
+                    //
                         $scope.yStart = (y1 + y2) / 2
                         $scope.xStart = (x1 + x2) / 2
 
@@ -219,12 +219,15 @@ angular.module('myApp.controllers', []).
 
 //                        $scope.yEnd = $scope.yStart + (100 * (1 / $scope.slope))
 //                        $scope.xEnd = $scope.xStart + (-100 * (1 / $scope.slope))
-
-                    $scope.tempDelta = 100
+                    if (y1 > y2) {  //points right
+                        $scope.tempDelta = -100
+                    } else {
+                        $scope.tempDelta = 100
+                    }
 
                     //THESE are also the equations for the centre point
                     $scope.xEnd = $scope.xStart + (-$scope.tempDelta )
-                    $scope.yEnd = ( 1 / $scope.slope) * ($scope.tempDelta) + $scope.yStart
+                    $scope.yEnd = ( 1 * ( 1 / $scope.slope) * ($scope.tempDelta)) + $scope.yStart
 
                     arcCalcService.setPoints($scope.xStart, $scope.yStart,  $scope.xEnd, $scope.yEnd)
                     $scope.xRot = arcCalcService.angle
@@ -246,7 +249,7 @@ angular.module('myApp.controllers', []).
                     };
 
 
-                    //}
+
                 } catch (e) {
                     console.debug("ISSUE in convertSegment: " + e.message)
                 }
