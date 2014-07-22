@@ -2,22 +2,22 @@
      ng-mousemove="checkHover($event)" stroke="grey" stroke-width="5" xmlns="http://www.w3.org/2000/svg">
 
     <rect x=0 y=0 ng-attr-height="{{svgObj.height}}" ng-attr-width="{{svgObj.width}}"/>
-    <line id="radiusLineObj_line" ng-attr-x1="{{xStart}}"
-          ng-attr-y1="{{yStart}}" ng-attr-x2="{{xEnd}}" ng-attr-y2="{{yEnd}}"
+    <line id="radiusLineObj_line" ng-attr-x1="{{guide.x1}}"
+          ng-attr-y1="{{guide.y1}}" ng-attr-x2="{{guide.x2}}" ng-attr-y2="{{guide.y2}}"
           stroke="orange" stroke-width="2" ng-click="handleRadiusLineClick($event)" ng-hover="handleRadiusLineHover($event)"/>
 
     <!--"M40,20  A30,30 0 0,0 70,70"-->
     <!--ng-repeat="arcObj in arcObjects"-->
     <path id="newArc"
-          ng-attr-d="M{{ arcObj.startX }},{{ arcObj.startY }}  A{{arcObj.rx}},{{arcObj.ry}} {{arcObj.xRot}} {{arcObj.largeArcFlag}},{{arcObj.sweepFlag}} {{arcObj.endX}},{{arcObj.endY}}"
-          stroke="{{newLineObj.strkColor}}" stroke-width="{{newLineObj.strkWdth}}"/>
+          ng-attr-d="M{{ arcObj.x1 }},{{ arcObj.y1 }}  A{{arcObj.rx}},{{arcObj.ry}} {{arcObj.angle}} {{arcObj.largeArcFlag}},{{arcObj.sweepFlag}} {{arcObj.x2}},{{arcObj.y2}}"
+          stroke="{{guide.strkColor}}" stroke-width="{{guide.strkWdth}}"/>
 
     <line id="newLineObj_line" ng-show="newPointForm.$valid" ng-attr-x1="{{newLineObj.x1}}"
           ng-attr-y1="{{newLineObj.y1}}" ng-attr-x2="{{newLineObj.x2}}" ng-attr-y2="{{newLineObj.y2}}"
           stroke="{{newLineObj.strkColor}}" stroke-width="{{newLineObj.strkWdth}}" ng-click="handleLineClick($event)"/>
 
     <line ng-repeat="lineObj in lineObjects" ng-attr-x1="{{lineObj.x1}}" ng-attr-y1="{{lineObj.y1}}"
-          ng-attr-x2="{{lineObj.x2}}" ng-attr-y2="{{lineObj.y2}}" stroke="{{ lineObj.strokeColor }}" stroke-width="5" ng-click="handleLineClick($event)"/>
+          ng-attr-x2="{{lineObj.x2}}" ng-attr-y2="{{lineObj.y2}}" stroke="blue" stroke-width="5" ng-click="handleLineClick($event)"/>
 
 
 
@@ -30,14 +30,15 @@
                 Show Curve Form
             </div>
             <div class="editRegionRow_short" ng-show="showCurveForm" ng-click="toggleCurveForm()">
+                <!--showCurveForm  toggleCurveForm()-->
                 Hide Curve Form
             </div>
             <div class="editRegionRow" ng-show="showCurveForm">
                 <div class="divForm_long">
                     <span class="float_lft">start X,Y:</span>
-                    <input type="number" ng-model="arcObj.startX" class="newLineObjCont coord_input float_lft" name="np_startX"
+                    <input type="number" ng-model="arcObj.x1" class="newLineObjCont coord_input float_lft" name="np_startX"
                            ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
-                    <input type="number" ng-model="arcObj.startY" class="newLineObjCont coord_input float_lft" name="np_startY"
+                    <input type="number" ng-model="arcObj.y1" class="newLineObjCont coord_input float_lft" name="np_startY"
                            ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                 </div>
                 <div class="divForm_long">
@@ -49,18 +50,18 @@
                 </div>
                 <div class="divForm_med">
                     <span class="float_lft">xRot:</span>
-                    <input type="number" ng-model="arcObj.xRot" class="newLineObjCont coord_input float_lft" name="np_xRot"
+                    <input type="number" ng-model="arcObj.angle" class="newLineObjCont coord_input float_lft" name="np_xRot"
                            ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
                 </div>
             </div>
             <div class="editRegionRow" ng-show="showCurveForm">
                 <div class="divForm">
                     <span class="float_lft">largeArc:</span>
-                    <input type="checkbox" ng-model="arcObj.largeArcFlag" ng-true-value=1 ng-false-value=0 ng-change="flipFlag(arcObj.largeArcFlag)">
+                    <input type="checkbox" ng-model="arcObj.largeArcFlag" ng-true-value=1 ng-false-value=0 >
                 </div>
                 <div class="divForm">
                     <span class="float_lft">sweep:</span>
-                    <input type="checkbox" ng-model="arcObj.sweepFlag" ng-true-value=1 ng-false-value=0 ng-change="flipFlag(arcObj.sweepFlag)">
+                    <input type="checkbox" ng-model="arcObj.sweepFlag" ng-true-value=1 ng-false-value=0 >
 
                     <!--<input type="number" ng-model="arcObj.largeArcFlag" class="newLineObjCont flag_input float_lft" name="np_largeArcFlag"-->
                            <!--ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">-->
@@ -69,9 +70,9 @@
                 </div>
                 <div class="divForm_long">
                     <span class="float_lft">end X,Y:</span>
-                    <input type="number" ng-model="arcObj.endX" class="newLineObjCont coord_input float_lft" name="np_endX"
+                    <input type="number" ng-model="arcObj.x2" class="newLineObjCont coord_input float_lft" name="np_endX"
                            ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
-                    <input type="number" ng-model="arcObj.endY" class="newLineObjCont coord_input float_lft" name="np_endY"
+                    <input type="number" ng-model="arcObj.y2" class="newLineObjCont coord_input float_lft" name="np_endY"
                            ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                 </div>
                 <!--<div ng-show="(!newPointForm.np_x1.$valid || !newPointForm.np_y1.$valid || !newPointForm.np_x2.$valid  || !newPointForm.np_y2.$valid )"-->
@@ -147,7 +148,7 @@
                 <!--<input type="button" id="submit" value="Add Point from Prev" class="red_Button fromButton" ng-click="submitAddForm(true)"/>-->
 
                 In Path Mode : <input type="checkbox" ng-model="pathMode" ng-change="checkPathMode()">
-                In Click Mode : <input type="checkbox" ng-model="inClickMode" ng-change="flipFlag(inClickMode)">
+                In Click Mode : <input type="checkbox" ng-model="inClickMode" >
 
                 <!--<span>pathMode = {{pathMode | json}}</span><br/>-->
             </div>

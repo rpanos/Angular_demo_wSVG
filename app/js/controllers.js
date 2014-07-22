@@ -8,10 +8,18 @@ angular.module('myApp.controllers', []).
     /*
      todos
 
-     -possibly remove inclickmode - OR NO
-     - move some logic to services
+     - MODES IN A DROP DOWN!
+     - "new line" goes invisible when above not-paper and then re-greys at paper = easy!
+        - remove Label business?
+     - Test sweepFlag more - maybe set dynamically?
+
+     - possibly remove inclickmode - OR NO!!
+     - move some MORE logic to services
      - Maybe just remove valid for coords completely
-     - maybe wrote a directive to show a "swicth"
+     - maybe wrote a directive to show a "swicth" - but start with select
+
+     - move labels into one object
+     - remove all of init not needed
 
 
      */
@@ -25,7 +33,7 @@ angular.module('myApp.controllers', []).
             $scope.hidePointsLabel = "Show Points";
             $scope.pathMode = true;
             $scope.pathModeLabel = "Path Mode";
-            $scope.pathModeClass = "Path Mode";
+            $scope.pathModeClass = "PathMode";  // TODO complete or remove - in index.html
             $scope.showPointsForm = true;
             $scope.showCurveForm = true;
 
@@ -46,35 +54,39 @@ angular.module('myApp.controllers', []).
             $scope.clickLineObj.strokeColor = "blue";
 
             //TODO make an obj
-            $scope.yStart = 0
-            $scope.xStart = 0
-            $scope.yEnd = 0
-            $scope.xEnd = 0
+//            $scope.yStart = 0
+//            $scope.xStart = 0
+//            $scope.yEnd = 0
+//            $scope.xEnd = 0
 
             //Service?
             $scope.svgObj = {
-                width: 1100,
+                width: 900,
                 height: 750,
                 strkColor: "grey",
                 strkWdth: 5
             };
 
-            $scope.arcObj = {
-                startX: 400,
-                startY: 400,
-                rx: 200,
-                ry: 200,
-                xRot:45,
+//            $scope.arcObj = {
+//                startX: 400,
+//                startY: 400,
+//                rx: 200,
+//                ry: 200,
+//                xRot:45,
+//
+//                largeArcFlag: 0 ,
+//                sweepFlag: 1 ,
+//
+//                endX: 600,
+//                endY: 200
+//            };
 
-                largeArcFlag: 0 ,
-                sweepFlag: 1 ,
-
-                endX: 600,
-                endY: 200
-            };
+            // todo take form attr and apply an onChange?
             $scope.textX = $scope.svgObj.width - 90;
            //$scope.svgObj.width - 70
             $scope.textY = $scope.svgObj.height - 25;  //
+
+
 
             $scope.resetFromPathMode = function (event) {
                 $scope.firstPointSet = false;
@@ -150,15 +162,17 @@ angular.module('myApp.controllers', []).
 
                 } else {
 
-                }
-                ;
+                };
             };
             $scope.toggleCurveForm = function () {
                 $scope.showCurveForm = !$scope.showCurveForm;
             };
-            $scope.toggleCurveForm = function (flag) {
-                flag = !flag;
-            };
+//            $scope.flipFlag = function(flag) {
+//                flag != flag;
+//            };
+//            $scope.toggleCurveForm = function (flag) {
+//                flag = !flag;
+//            };
             $scope.toggleHidePoints = function () {
                 $scope.hidePoints = !$scope.hidePoints;
                 if ($scope.hidePoints) {
@@ -170,10 +184,19 @@ angular.module('myApp.controllers', []).
 
             $scope.handleLineClick = function (obj) {
 
+                //put old back
+                if (typeof($scope.selectedElem) != "undefined"  ) {
+                    $scope.selectedElem.attr("stroke", "blue");
+                    $scope.selectedElem.attr("stroke-width", "5");
+                }
+
                 //$scope.selectedElem.attr("stroke", "blue");
+                //TODO - be sure its a chord!
                 $scope.selectedElem = angular.element(obj.target);
                 $scope.selectedElem.attr("stroke", "orange");
+                $scope.selectedElem.attr("stroke-width", "2");
 
+                console.debug($scope.selectedElem);
 
             };
 
@@ -197,58 +220,12 @@ angular.module('myApp.controllers', []).
 
             $scope.convertSegment = function () {
                 try {
-//                var x1 = $scope.selectedElem.x1.value;
-//                var y1 = $scope.selectedElem.y1.value;
-//                var x2 = $scope.selectedElem.x2.value;
-//                var y2 = $scope.selectedElem.y2.value;
+                    arcCalcService.setChordPoints(parseFloat($scope.selectedElem.attr("x1")), parseFloat($scope.selectedElem.attr("y1")),
+                        parseFloat($scope.selectedElem.attr("x2")), parseFloat($scope.selectedElem.attr("y2")));
 
-                    var x1 = parseFloat($scope.selectedElem.attr("x1"));
-                    var y1 = parseFloat($scope.selectedElem.attr("y1"));
-                    var x2 = parseFloat($scope.selectedElem.attr("x2"));
-                    var y2 = parseFloat($scope.selectedElem.attr("y2"));
-
-                    $scope.slope = (y1 - y2) / (x1 - x2)
-
-                    console.log("PT 1 at:" + x1 + ", " + y1 + " w " + $scope.slope);
-
-                    //
-                        $scope.yStart = (y1 + y2) / 2
-                        $scope.xStart = (x1 + x2) / 2
-
-                    console.log("PT MID at:" + $scope.xStart + ", " + $scope.yStart);
-
-//                        $scope.yEnd = $scope.yStart + (100 * (1 / $scope.slope))
-//                        $scope.xEnd = $scope.xStart + (-100 * (1 / $scope.slope))
-                    if (y1 > y2) {  //points right
-                        $scope.tempDelta = -100
-                    } else {
-                        $scope.tempDelta = 100
-                    }
-
-                    //THESE are also the equations for the centre point
-                    $scope.xEnd = $scope.xStart + (-$scope.tempDelta )
-                    $scope.yEnd = ( 1 * ( 1 / $scope.slope) * ($scope.tempDelta)) + $scope.yStart
-
-                    arcCalcService.setPoints($scope.xStart, $scope.yStart,  $scope.xEnd, $scope.yEnd)
-                    $scope.xRot = arcCalcService.angle
-
-                    console.log("Set angle at:" + $scope.xRot)
-
-                    $scope.arcObj = {
-                        startX: x1,
-                        startY: y1,
-                        rx: 500,
-                        ry: 500,
-                        xRot:$scope.xRot,
-
-                        largeArcFlag: 0 ,
-                        sweepFlag: 1 ,
-
-                        endX: x2,
-                        endY: y2
-                    };
-
-
+                    $scope.chord = arcCalcService.chord;
+                    $scope.guide = arcCalcService.guide;
+                    $scope.arcObj = arcCalcService.arcObj;
 
                 } catch (e) {
                     console.debug("ISSUE in convertSegment: " + e.message)
@@ -278,6 +255,8 @@ angular.module('myApp.controllers', []).
 
                     if (fromPrev) {
                         $scope.newLineObj = {
+
+                            ////todo chord obj !!
                             x1: $scope.newLineObj.x2,
                             y1: $scope.newLineObj.y2,
                             x2: $scope.newLineObj.x2,
