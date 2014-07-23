@@ -24,9 +24,9 @@ angular.module('myApp.controllers', []).
 
      */
 
-    controller('MyCtrl1', [
-        '$scope', '$location', 'arcCalcService',
-        function ($scope, $location, arcCalcService) {
+    controller('DrawController', [
+        '$scope', '$location', 'arcCalcService', 'domService', 'SVGDataService',
+        function ($scope, $location, arcCalcService, domService, SVGDataService) {
 
             console.debug("YUP");
             $scope.hidePoints = false;
@@ -40,15 +40,15 @@ angular.module('myApp.controllers', []).
             $scope.trueVal = true;   //TODO: find better sol
             $scope.falseVal = true;
 
-            $scope.newLineObj = {};
+            SVGDataService.newLineObj = {};  //TODO MOOT?
             $scope.clickLineObj = {};
             $scope.lastLine = {};//pointless?
 
-            $scope.lineObjects = [];
+            $scope.lineObjects = SVGDataService.lineObjects;  //moot?
 
             //TEMP!!!
             $scope.inClickMode = true;  //CONSIDER another method
-            $scope.firstPointSet = false;
+            SVGDataService.firstPointSet = false;  //TODO  MOOT?! def set in service?
             $scope.isHovering = true;
             //set elsewhere?
             $scope.clickLineObj.strokeColor = "blue";
@@ -67,59 +67,42 @@ angular.module('myApp.controllers', []).
                 strkWdth: 5
             };
 
-//            $scope.arcObj = {
-//                startX: 400,
-//                startY: 400,
-//                rx: 200,
-//                ry: 200,
-//                xRot:45,
-//
-//                largeArcFlag: 0 ,
-//                sweepFlag: 1 ,
-//
-//                endX: 600,
-//                endY: 200
-//            };
 
             // todo take form attr and apply an onChange?
             $scope.textX = $scope.svgObj.width - 90;
            //$scope.svgObj.width - 70
             $scope.textY = $scope.svgObj.height - 25;  //
 
-
-
             $scope.resetFromPathMode = function (event) {
-                $scope.firstPointSet = false;
-
-                $scope.newLineObj = {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 0
-                };
+                SVGDataService.firstPointSet = false;
+                //SVGDataService.
+                $scope.newLineObj = SVGDataService.giveBlankLineObj();
             };
-            $scope.resetFromPathMode();
 
-            $scope.insertLines = function () {
-
-                _.each(lineObjects, function (lObj) {
-
-
-                });
-
-            };
             /*
              * IFF a click set has begun, let the line draw in anticipation
+             *
+             * TODO move both of these to the service?
              */
-            $scope.checkHover = function (event) {
-                if ( $scope.inClickMode && $scope.firstPointSet) {  //$scope.newPointForm.$valid &&
+            $scope.checkPaperHover = function (event) {
+                if ( $scope.inClickMode && SVGDataService.firstPointSet  ) {  //$scope.newPointForm.$valid &&
                     $scope.newLineObj.x2 = event.offsetX;
                     $scope.newLineObj.y2 = event.offsetY;
-
-                    //console.debug("HOVER $scope.clickLineObj: ", $scope.clickLineObj, $scope.newPointForm.$valid);
-                } else {
-                    console.debug("NOT hover bc state:", $scope.newPointForm.$valid, $scope.inClickMode, $scope.firstPointSet);
                 }
+            }
+            //this is temp over a more all encopassing service that determines hover_paper vs hover_not_paper
+            $scope.checkRightRailHover = function (event) {
+                $scope.newLineObj.x2 = $scope.newLineObj.x1;
+                $scope.newLineObj.y2 = $scope.newLineObj.y1;
+            }
+            $scope.checkAllHover = function (event) {
+
+                //TODO - finish service
+//                if (! domService.checkAscendants(event.target, possibleParent, termParent) ) {
+//                        $scope.lineObjects.x2 = $scope.newLineObj.x1;
+//                        $scope.newLineObj.y2 = $scope.newLineObj.y1;
+//                        $scope.overPaper = false;
+//                    }
             };
 
             $scope.checkForm = function () {
@@ -135,86 +118,25 @@ angular.module('myApp.controllers', []).
 
             $scope.handlePaperClick = function (event) {
                 //console.debug("!!!! handlePaperClick event", event);
-                console.debug("!!****!! handlePaperClick STATE:", $scope.inClickMode, $scope.firstPointSet);
-                if ($scope.inClickMode && !$scope.firstPointSet) {
-                    console.debug("---1---Should be setting first point")
-                    $scope.newLineObj.x1 = event.offsetX;
-                    $scope.newLineObj.y1 = event.offsetY;
+                console.debug("!!****!! handlePaperClick STATE:", $scope.inClickMode, SVGDataService.firstPointSet);
+                                // (newLineObj, inClickMode, pathMode, validForm, event)
+                $scope.newLineObj = SVGDataService.newPoint($scope.newLineObj, $scope.inClickMode, $scope.pathMode, $scope.newPointForm.$valid, event);
 
-                    $scope.firstPointSet = true;
-                    console.debug("!!$$$!! SET handlePaperClick STATE:", $scope.inClickMode, $scope.firstPointSet);
-                } else if ($scope.inClickMode && $scope.firstPointSet) {
-                    console.debug("---2---Should be setting second point")
-                    $scope.newLineObj.x2 = event.offsetX;
-                    $scope.newLineObj.y2 = event.offsetY;
-
-                    $scope.firstPointSet = false;  //shuts off hover
-
-                    $scope.submitAddForm($scope.pathMode);
-                    //BUT now we want temp line gone?
-                } else {
-                    console.debug("ERROR in handleClick", $scope.inClickMode, $scope.firstPointSet);
-                }
-            };
-            $scope.togglePointsForm = function () {
-                $scope.showPointsForm = !$scope.showPointsForm;
-                if ($scope.hidePoints) {
-
-                } else {
-
-                };
-            };
-            $scope.toggleCurveForm = function () {
-                $scope.showCurveForm = !$scope.showCurveForm;
-            };
-//            $scope.flipFlag = function(flag) {
-//                flag != flag;
-//            };
-//            $scope.toggleCurveForm = function (flag) {
-//                flag = !flag;
-//            };
-            $scope.toggleHidePoints = function () {
-                $scope.hidePoints = !$scope.hidePoints;
-                if ($scope.hidePoints) {
-                    $scope.hidePointsLabel = "Hide Points";
-                } else {
-                    $scope.hidePointsLabel = "Show Points";
-                }
             };
 
-            $scope.handleLineClick = function (obj) {
-
+            $scope.handleLineClick = function (event) {
                 //put old back
                 if (typeof($scope.selectedElem) != "undefined"  ) {
                     $scope.selectedElem.attr("stroke", "blue");
                     $scope.selectedElem.attr("stroke-width", "5");
                 }
-
-                //$scope.selectedElem.attr("stroke", "blue");
-                //TODO - be sure its a chord!
-                $scope.selectedElem = angular.element(obj.target);
+                $scope.selectedElem = angular.element(event.target);
                 $scope.selectedElem.attr("stroke", "orange");
                 $scope.selectedElem.attr("stroke-width", "2");
-
-                console.debug($scope.selectedElem);
-
             };
 
-            $scope.togglePathMode = function () {
-                $scope.pathMode = !$scope.pathMode;
-                if ($scope.pathMode) {
-                    $scope.pathModeLabel = "Path Mode";
-                    $scope.pathModeClass = "PathMode";
-                } else {
-                    $scope.pathModeLabel = "NOT Path Mode";
-                    $scope.pathModeClass = "PathMode";//eventually disable or whatever?
-
-                    $scope.resetFromPathMode();
-                }
-            };
 
             $scope.checkPathMode = function () {
-
                 $scope.resetFromPathMode();  //This still valid?
             };
 
@@ -236,41 +158,69 @@ angular.module('myApp.controllers', []).
 
             }
 
+            /**
+             * Adds the current proposed line to the list of line segments.  This is currently used by
+             * both the
+             *
+             * @param {fromPrev} boolean for whether the next line starts at the end of this added line
+             * @return {Circle} The new Circle object.
+             */
             $scope.submitAddForm = function (fromPrev) {
 
                 fromPrev = fromPrev || $scope.pathMode;
-                console.debug("!!!! ADDING ", $scope.newLineObj, " W ", fromPrev);
 
                 if ($scope.newPointForm.$valid) {
 
-                    // newLineObj chng
-                    $scope.newLineObj = angular.copy($scope.newLineObj);
-                    $scope.newLineObj.strokeColor = "red";
-
-                    // Also add an ID to refer to later?
-                    // $scope.newLineObj.id = $scope.lineObjects.length
-
-                    $scope.lineObjects.push($scope.newLineObj);
-                    $scope.newLineObj.strokeColor = "blue";  //for while choosing
-
-                    if (fromPrev) {
-                        $scope.newLineObj = {
-
-                            ////todo chord obj !!
-                            x1: $scope.newLineObj.x2,
-                            y1: $scope.newLineObj.y2,
-                            x2: $scope.newLineObj.x2,
-                            y2: $scope.newLineObj.y2
-                        };
-                        $scope.firstPointSet = true;
-                    } else {
-                        $scope.newLineObj = {};
-                    }
+                    $scope.newLineObj=SVGDataService.addLine(angular.copy($scope.newLineObj), fromPrev);
+                    console.debug("RETURNED NEW obj:" + $scope.newLineObj.x1);
+                    console.debug( $scope.newLineObj );
+                    $scope.lineObjects = SVGDataService.lineObjects;  //TODO .getLineObjects();
+                    console.debug($scope.lineObjects);
 
                 }
 
             };
 
+            /*****
+             *
+             * All the toggle silliness
+             *
+             *
+             */
+            $scope.togglePointsForm = function () {
+                $scope.showPointsForm = !$scope.showPointsForm;
+                if ($scope.hidePoints) {
+
+                } else {
+
+                };
+            };
+            $scope.toggleCurveForm = function () {
+                $scope.showCurveForm = !$scope.showCurveForm;
+            };
+            $scope.toggleHidePoints = function () {
+                $scope.hidePoints = !$scope.hidePoints;
+                if ($scope.hidePoints) {
+                    $scope.hidePointsLabel = "Hide Points";
+                } else {
+                    $scope.hidePointsLabel = "Show Points";
+                }
+            };
+            $scope.togglePathMode = function () {
+                $scope.pathMode = !$scope.pathMode;
+                if ($scope.pathMode) {
+                    $scope.pathModeLabel = "Path Mode";
+                    $scope.pathModeClass = "PathMode";
+                } else {
+                    $scope.pathModeLabel = "NOT Path Mode";
+                    $scope.pathModeClass = "PathMode";//eventually disable or whatever?
+
+                    $scope.resetFromPathMode();
+                }
+            };
+
+            /// "INIT"
+            $scope.resetFromPathMode();
 
             /*
              $scope.lineObjects = [ {

@@ -13,7 +13,110 @@ angular.module('myApp.services', []).
         }
     }
   }).
-  factory('arcCalcService', function(){
+  factory('domService', function() {
+        var funcs = {
+
+        };
+
+        funcs.checkAscendants = function(elem, possibleParent, termParent) {
+            // TODO make this work using elem.parent(), etc
+        }
+        return funcs;
+  }).
+    factory('SVGDataService', function(){
+
+        var funcs = {
+            firstPointSet: false,
+            lineObjects: []
+        };
+
+        funcs.getLineObjects =function() {  //todo moot?
+            this.lineObjects;
+        };
+
+        funcs.addLine = function(lineObj, fromPrev) {
+            // newLineObj chng
+            //newLineObj = angular.copy(lineObj);
+            console.log(" IN addLine: "     );
+            console.log(  lineObj  );
+
+            lineObj.strokeColor = "red";
+
+            this.lineObjects.push(lineObj);
+
+        // Also add an ID to refer to later?
+        // $scope.newLineObj.id = $scope.lineObjects.length
+            if (fromPrev) {
+                //this.
+                console.log("SHOULD BE SETTING NEW LINE TO END");
+                var newLineObj = {
+                    x1: lineObj.x2,
+                    y1: lineObj.y2,
+                    x2: lineObj.x2,
+                    y2: lineObj.y2,
+                    strokeColor : "blue"
+                };
+                this.firstPointSet = true;   console.debug("!!$$$!! SET handlePaperClick STATE:", this.firstPointSet);
+            } else {
+                //this.
+                var newLineObj = {
+                    strokeColor : "blue"
+                };
+            }
+            return newLineObj;
+        };
+        funcs.newPoint = function(newLineObj, inClickMode, pathMode, validForm, event) { //$scope.inClickMode
+            try {
+            if (inClickMode && !this.firstPointSet) {
+                console.debug("---1---Should be setting first point ---- this.firstPointSet:" + this.firstPointSet);
+                console.debug(event);
+                newLineObj.x1 = event.offsetX;
+                newLineObj.y1 = event.offsetY;
+
+                this.firstPointSet = true;
+                console.debug("!!$$$!! SET handlePaperClick STATE:", inClickMode, this.firstPointSet);
+            } else if (inClickMode && this.firstPointSet) {
+                console.debug("---2---Should be setting second point --- this.firstPointSet:" + this.firstPointSet + "-pathMode -" + pathMode )
+                newLineObj.x2 = event.offsetX;
+                newLineObj.y2 = event.offsetY;
+
+                this.firstPointSet = false;  //shuts off hover
+
+                if (validForm) {
+                    newLineObj=this.addLine(angular.copy(newLineObj), pathMode);
+
+                    console.debug("RETURNED NEW obj:" + newLineObj.x1);
+                    console.debug( newLineObj );
+                    ////////////////////////////////////////////////////////$scope.lineObjects = SVGDataService.lineObjects;  //TODO .getLineObjects();
+                    console.debug(this.lineObjects);
+                } else {
+                    console.debug( " NOT VALID FORM!!!" );
+                }
+                //BUT now we want temp line gone?
+            } else {
+                console.debug("ERROR in handleClick", inClickMode, this.firstPointSet);
+            }
+            } catch (e) {
+                console.debug("ISSUE in newPoint: " + e.message)
+            }
+            //could return newLineObj but dont have too.
+            return newLineObj;
+        };
+
+        funcs.giveBlankLineObj = function() {
+            return {    x1: 0,
+                y1: 0,
+                x2: 0,
+                y2: 0
+                // color too?
+            }
+        }
+
+
+        return funcs;
+
+    }).
+    factory('arcCalcService', function(){
 
         var funcs = {
 
@@ -94,9 +197,14 @@ angular.module('myApp.services', []).
             }
 
         };
-        //funcs.
 
         return funcs;
 
+  }).
+  service('helloWorldFromService', function() {
+        this.sayHello = function() {
+            return "BLAH"
+
+        };
   }).
   value('version', '0.1');
