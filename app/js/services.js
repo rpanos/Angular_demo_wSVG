@@ -128,7 +128,7 @@ angular.module('myApp.services', []).
             rx: 400,
             ry: 400,
             largeArcFlag: 0,
-            sweepFlag: 1
+            sweepFlag: 0
         }
         funcs.chord = {
 
@@ -181,10 +181,19 @@ angular.module('myApp.services', []).
                 if ((this.chord.y1 > this.chord.y2 && this.chord.x1 < this.chord.x2) || (this.chord.y1 < this.chord.y2  && this.chord.x1 > this.chord.x2)) {
                     this.guide.x2 = this.guide.x1 + xDelt;
                     this.guide.y2 = this.guide.y1 + yDelt;
+
+
                 } else {
                     this.guide.x2 = this.guide.x1 - xDelt;
                     this.guide.y2 = this.guide.y1 + yDelt;
                 }
+                this.arcObj.sweepFlag = 1;
+
+                if ((this.chord.y1 > this.chord.y2 && this.chord.x1 > this.chord.x2) || (this.chord.y1 < this.chord.y2 && this.chord.x1 > this.chord.x2)) {
+
+                    this.arcObj.sweepFlag = 0;
+                }
+
                 this.arcObj.x1 = this.chord.x1;
                 this.arcObj.y1 = this.chord.y1;
                 this.arcObj.x2 = this.chord.x2;

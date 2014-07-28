@@ -3,14 +3,114 @@
   Showing of 'interpolate' filter:
   {{ 'Current version is v%VERSION%.' | interpolate }}
   <br /><!--<input type="button" id="submit" value="{{pathModeLabel}}" class="red_Button {{pathModeClass}}" ng-click="togglePathMode(true)"/>-->
-  
-  
+
+
   <input type="button" id="submit" value="{{pathModeLabel}}" class="red_Button {{pathModeClass}}" ng-click="togglePathMode(true)"/>
-  
+
   <option value=true>Path Mode</option>
   <option value=false>NOT Path Mode</option>
 </p>
 
 
+<div class="modes_region">
 
-ng-change="checkForm()"
+    <div class="switch radius"><input type="radio" value="draw" name="currentMode"><label for="currentMode"></label><span> Draw Mode </span></div>
+    <div class="switch radius"><input type="radio" value="path" name="currentMode"><label for="currentMode"></label><span> Path Mode </span></div>
+
+
+    <!--&lt;!&ndash;    name="drawMode"     &ndash;&gt;    ng-change="updateSwitchText()"    class="mode_checkbox"   -->
+    <div class="modes_region" ng-click="updateSwitchText()">
+        <div class="switch radius">
+            <input id="drawModeSwitch_path" type="radio" value="path" name="drawMode" checked="">
+            <label for="drawModeSwitch_path"></label>
+            <span id="drawModeSwitch_path_txt"> Path Mode </span>
+        </div>
+        <!--&lt;!&ndash;    name="drawMode"     &ndash;&gt;    ng-change="updateSwitchText()"    class="mode_checkbox"   -->
+        <div class="switch radius">
+            <input id="drawModeSwitch_segment" type="radio" value="segment" name="drawMode">
+            <label for="drawModeSwitch_segment"></label>
+            <span id="drawModeSwitch_segment_txt"> Segment Mode </span>
+        </div>
+
+        <div class="switch radius">
+            <input id="drawModeSwitch_convert" type="radio" value="convert" name="drawMode">
+            <label for="drawModeSwitch_convert"></label>
+            <span id="drawModeSwitch_convert_txt"> Convert Mode </span>
+        </div>
+    </div>
+
+    <div class="modes_region">
+
+        <div class="switch radius">
+            <input type="radio" value="path" name="currentMode">
+            <label for="currentMode"></label>
+            <span> Path Mode </span>
+        </div>
+        <div class="switch radius">
+            <input type="radio" value="segment" name="currentMode">
+            <label for="currentMode"></label>
+            <span> Segment Mode </span>
+        </div>
+        <div class="switch radius">
+            <input type="radio" value="convert" name="currentMode">
+            <label for="currentMode"></label>
+            <span> Convert Mode </span>
+        </div>
+
+
+        <!--&lt;!&ndash;    name="drawMode"     &ndash;&gt;    ng-change="updateSwitchText()"    class="mode_checkbox"   -->
+
+
+
+    </div>
+
+<!------------------------------------------->
+
+    <div class="modes_region" ng-click="updateSwitchText()">
+        <div class="switch radius">
+            <input id="drawModeSwitch_path" type="radio" value="path" name="drawMode" checked="">
+            <label for="drawModeSwitch_path"></label>
+            <span id="drawModeSwitch_path_txt"> Path Mode </span>
+        </div>
+        <!--&lt;!&ndash;    name="drawMode"     &ndash;&gt;    ng-change="updateSwitchText()"    class="mode_checkbox"   -->
+        <div class="switch radius">
+            <input id="drawModeSwitch_segment" type="radio" value="segment" name="drawMode">
+            <label for="drawModeSwitch_segment"></label>
+            <span id="drawModeSwitch_segment_txt"> Segment Mode </span>
+        </div>
+
+        <div class="switch radius">
+            <input id="drawModeSwitch_convert" type="radio" value="convert" name="drawMode">
+            <label for="drawModeSwitch_convert"></label>
+            <span id="drawModeSwitch_convert_txt"> Convert Mode </span>
+        </div>
+    </div>
+    <div class="modes_region">
+
+        <div class="switch radius">
+            <input type="radio" value="path" name="currentMode" id="currentMode" checked="">
+            <label for="currentMode"></label>
+            <span> Path Mode </span>
+        </div>
+        <div class="switch radius">
+            <input type="radio" value="segment" name="currentMode" id="currentMode">
+            <label for="currentMode"></label>
+            <span> Segment Mode </span>
+        </div>
+        <div class="switch radius">
+            <input type="radio" value="convert" name="currentMode" id="currentMode">
+            <label for="currentMode"></label>
+            <span> Convert Mode </span>
+        </div>
+
+
+        <!--&lt;!&ndash;    name="drawMode"     &ndash;&gt;    ng-change="updateSwitchText()"    class="mode_checkbox"   -->
+
+
+
+    </div>
+
+
+
+
+</div>

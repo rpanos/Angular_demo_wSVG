@@ -2,23 +2,13 @@
 
 /* Directives */
 
-
-/*
- * THIS GLOBAL and naughty
- * 
- */
-//function isEmpty(value) {
-//  return angular.isUndefined(value) || value === '' || value === null || value !== value;
-//}
-
 angular.module('myApp.directives', []).
   directive('appVersion', ['version', function(version) {
     return function(scope, elm, attrs) {
       elm.text(version);
     };
-    
-
-  }]).directive('ngMin', ['utilService', function( utilService){
+  }]).
+  directive('ngMin', ['utilService', function( utilService){
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -41,7 +31,8 @@ angular.module('myApp.directives', []).
             ctrl.$formatters.push(minValidator);
         }
     };
-  }]).directive('ngMax', ['utilService', function( utilService){
+  }]).
+  directive('ngMax', ['utilService', function( utilService){
       return {
           restrict: 'A',
           require: 'ngModel',
@@ -64,7 +55,52 @@ angular.module('myApp.directives', []).
               ctrl.$formatters.push(maxValidator);
           }
       };
-  }]);
+  }]).
+    directive('rcpRadio', [ function( ) {
+        return {
+            restrict: 'E',
+            scope: {
+            },
+            template: "<div class='switch radius'><input type='radio' value='{{selection}}' name='{{selectionName}}' id='{{selectionName}}_id' ng-model='$parent.drawMode'><label for='currentMode'></label><span> {{label}} </span></div>",
+            link: function($scope, element, attr, controller) {
+                var label, elementHTML, selection, selectionName;   //value='{{selection}}'    checked='' ng-value='{{selection}}'
+                try {
+                    if (typeof(attr) != "undefined" && typeof(attr.label) != "undefined") {
+                        $scope.label = attr.label;
+                    } else {
+                        $scope.label = "";
+                    }
+                    if (typeof(attr) != "undefined" && typeof(attr.selection) != "undefined") {
+                        $scope.selection = attr.selection;
+                        //For default checked!
+                        if (typeof(attr) != "undefined" && typeof(attr.isChecked) != "undefined" && attr.isChecked) {
+                            $scope.$parent.drawMode = attr.selection;
+                        }
+                    } else {
+                        $scope.selection = "";
+                    }
+                    if (typeof(attr) != "undefined" && typeof(attr.selectionName) != "undefined") {
+                        $scope.selectionName = attr.selectionName;
+                    } else {
+                        $scope.selectionName = "";
+                    }
+
+                    element.on('click', function(event) {
+                        var inputElem = angular.element(event.srcElement.parentElement).find("input")[0];
+                        if (! inputElem.checked ) {
+                            inputElem.checked = true;
+                            $scope.$parent.drawMode = angular.element(inputElem).attr("value");
+                        }
+
+                    });
+                // TODO: remove try/catch in "production"
+                } catch (e) {
+                    console.debug("%%% ERR IN rcpRadio-link");
+                    console.debug(e.message )
+                }
+            }
+    };
+}]);
 
 
 

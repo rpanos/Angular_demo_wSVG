@@ -25,8 +25,8 @@ angular.module('myApp.controllers', []).
      */
 
     controller('DrawController', [
-        '$scope', '$location', 'arcCalcService', 'domService', 'SVGDataService',
-        function ($scope, $location, arcCalcService, domService, SVGDataService) {
+        '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'SVGDataService',           //'$watch', '$window',
+        function ($scope, $rootScope, $location, arcCalcService, domService, SVGDataService) {          //$watch, $window,
 
             console.debug("YUP");
             $scope.hidePoints = false;
@@ -36,6 +36,8 @@ angular.module('myApp.controllers', []).
             $scope.pathModeClass = "PathMode";  // TODO complete or remove - in index.html
             $scope.showPointsForm = true;
             $scope.showCurveForm = true;
+
+            $scope.mode_switch = "path";
 
             $scope.trueVal = true;   //TODO: find better sol
             $scope.falseVal = true;
@@ -58,20 +60,32 @@ angular.module('myApp.controllers', []).
 //            $scope.xStart = 0
 //            $scope.yEnd = 0
 //            $scope.xEnd = 0
-
+//            $scope.svgChange = function() {
+//                //$scope.svgObj.width = $scope.selectedElem.attr("offsetwidth");
+//                $scope.svgObj.width = event.offsetwidth;
+//
+//            };
             //Service?
             $scope.svgObj = {
-                width: 900,
+//                width: 900,
+                width: '100%',
                 height: 750,
                 strkColor: "grey",
                 strkWdth: 5
             };
 
+//            $scope.$watch(function(){
+//                return $window.innerWidth;
+//            }, function(value) {
+//                console.log("innerWidth: " + value);
+//            });
 
-            // todo take form attr and apply an onChange?
-            $scope.textX = $scope.svgObj.width - 90;
-           //$scope.svgObj.width - 70
-            $scope.textY = $scope.svgObj.height - 25;  //
+            $scope.updateSwitchText = function() {
+                console.log("--> mode_switch: " + $scope.mode_switch);
+
+                console.log("--> newPointForm: "); console.log($scope.newPointForm);
+
+            };
 
             $scope.resetFromPathMode = function (event) {
                 SVGDataService.firstPointSet = false;
@@ -92,8 +106,10 @@ angular.module('myApp.controllers', []).
             }
             //this is temp over a more all encopassing service that determines hover_paper vs hover_not_paper
             $scope.checkRightRailHover = function (event) {
-                $scope.newLineObj.x2 = $scope.newLineObj.x1;
-                $scope.newLineObj.y2 = $scope.newLineObj.y1;
+                if ($scope.inClickMode && SVGDataService.firstPointSet ) {
+                    $scope.newLineObj.x2 = $scope.newLineObj.x1;
+                    $scope.newLineObj.y2 = $scope.newLineObj.y1;
+                }
             }
             $scope.checkAllHover = function (event) {
 
@@ -134,7 +150,28 @@ angular.module('myApp.controllers', []).
                 $scope.selectedElem.attr("stroke", "orange");
                 $scope.selectedElem.attr("stroke-width", "2");
             };
+            $scope.confirmdrawMode = function(){
+                console.log("### drawMode: " + $scope.drawMode);
+            };
+            $scope.$watch('drawMode', function() {
+                console.log("## __2__ # drawMode: " + $scope.drawMode);
+                if ($scope.drawMode == 'path') {
+                    $scope.inClickMode = true;
+                    $scope.pathMode = true;
+                } else if ($scope.drawMode == 'segment') {
+                    $scope.inClickMode = true;
+                    $scope.pathMode = false;
+                    $scope.resetFromPathMode();
 
+                } else if ($scope.drawMode == 'convert') {
+                    $scope.inClickMode = false;
+                    $scope.pathMode = false;
+                    $scope.resetFromPathMode();
+
+                } else {
+                    console.log("NO or wrong drawMode ?")
+                }
+            });
 
             $scope.checkPathMode = function () {
                 $scope.resetFromPathMode();  //This still valid?
@@ -195,10 +232,7 @@ angular.module('myApp.controllers', []).
 
                 };
             };
-            $scope.toggleCurveForm = function () {
-                $scope.showCurveForm = !$scope.showCurveForm;
-            };
-            $scope.toggleHidePoints = function () {
+            $scope.togglePointsTable = function () {
                 $scope.hidePoints = !$scope.hidePoints;
                 if ($scope.hidePoints) {
                     $scope.hidePointsLabel = "Hide Points";
@@ -219,8 +253,27 @@ angular.module('myApp.controllers', []).
                 }
             };
 
-            /// "INIT"
-            $scope.resetFromPathMode();
+            angular.element(document).ready(function () {
+                console.log('Hello World');
+                /// "INIT"
+                $scope.resetFromPathMode();
+
+                $scope.svgPaper = angular.element(document.body.querySelector("#paper"))[0];
+                console.log("$$$$$ HAVE: " + $scope.svgPaper.clientWidth );
+                console.log($scope.svgPaper);
+
+                // NOTE: The user can change the size!
+                $scope.svgObj.width = $scope.svgPaper.clientWidth;
+                $scope.svgObj.height = $scope.svgPaper.clientHeight;
+
+                // todo take form attr and apply an onChange?
+                $scope.textX = $scope.svgPaper.clientWidth - 90;
+//                //$scope.svgObj.width - 70
+                $scope.textY = $scope.svgPaper.clientHeight - 25;
+            });
+
+
+
 
             /*
              $scope.lineObjects = [ {
