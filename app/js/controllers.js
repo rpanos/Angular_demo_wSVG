@@ -152,8 +152,9 @@ angular.module('myApp.controllers', []).
                 $scope.svgObj.width = $scope.svgPaper.clientWidth;
                 $scope.svgObj.height = $scope.svgPaper.clientHeight;
 
-                $scope.textX = $scope.svgPaper.clientWidth - 90;
-                $scope.textY = $scope.svgPaper.clientHeight - 25;
+                $scope.textX = $scope.svgPaper.clientWidth - 190;
+                $scope.textY = $scope.svgPaper.clientHeight - 125;
+//
             };
 
             $scope.init = function() {
@@ -166,8 +167,11 @@ angular.module('myApp.controllers', []).
                 };
                 $scope.guide = arcCalcService.initGuide;
                 $scope.arcObj = arcCalcService.giveInitArc();
-                $scope.arcObj.radiusx = 400;
                 $scope.arcObj.radiusy = 400;
+
+                //TEMP
+                $scope.ALTarcObj = {};
+                $scope.ALTarcObj.radiusx = 400;
 
                 $scope.hidePoints = false;
                 $scope.hidePointsLabel = "Show Points";
@@ -190,6 +194,8 @@ angular.module('myApp.controllers', []).
                 $scope.isFFox = (userAgent.indexOf("Firefox")!=-1);
                 if ($scope.isFFox) {
                     console.log("FFOX!" + userAgent);
+                    $scope.svgObj.width = "1000px";
+                    $scope.svgObj.height = "650px";
                 } else {
                     console.log("NOT FFOX!" + userAgent);
                 }

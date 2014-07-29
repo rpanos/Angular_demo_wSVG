@@ -73,7 +73,9 @@ angular.module('myApp.directives', []).
     directive('resizable', function($window) {
         return function($scope) {
             return angular.element($window).bind('resize', function() {
-                $scope.resetSizeAtt();
+                if (!$scope.isFFox) {
+                    $scope.resetSizeAtt();
+                }
                 return $scope.$apply();
             });
         };

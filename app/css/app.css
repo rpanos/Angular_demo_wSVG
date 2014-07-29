@@ -57,12 +57,24 @@
 #paperContainer {
     float:left;
     width: 65%;
+
+    height: 650px;
+    position: relative;
 }
 #paper {
   float:left;
   width: 100%;
-    min-height: 500px;
+  height: 100%;
 }
+
+#paper rect {
+    width: 750px;
+    height: 450px;
+    /*width: 100%;*/
+    /*height: 100%;*/
+    fill: "black";
+}
+
 #top_info {
     width:100%;
 }
