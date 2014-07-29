@@ -8,6 +8,9 @@ angular.module('myApp.controllers', []).
     /*
      todos
 
+     - move away from foundation bc it requires jquery
+
+
      - "new line" goes invisible when above not-paper and then re-greys at paper = easy!
         - remove Label business?
      - Test sweepFlag more - maybe set dynamically?
@@ -239,21 +242,8 @@ angular.module('myApp.controllers', []).
                     $scope.hidePointsLabel = "Show Points";
                 }
             };
-            $scope.togglePathMode = function () {
-                $scope.pathMode = !$scope.pathMode;
-                if ($scope.pathMode) {
-                    $scope.pathModeLabel = "Path Mode";
-                    $scope.pathModeClass = "PathMode";
-                } else {
-                    $scope.pathModeLabel = "NOT Path Mode";
-                    $scope.pathModeClass = "PathMode";//eventually disable or whatever?
-
-                    $scope.resetFromPathMode();
-                }
-            };
 
             angular.element(document).ready(function () {
-                console.log('Hello World');
                 /// "INIT"
                 $scope.resetFromPathMode();
 
@@ -262,55 +252,13 @@ angular.module('myApp.controllers', []).
                 console.log($scope.svgPaper);
 
                 // NOTE: The user can change the size!
-                $scope.svgObj.width = $scope.svgPaper.clientWidth;
-                $scope.svgObj.height = $scope.svgPaper.clientHeight;
+//                $scope.svgObj.width = $scope.svgPaper.clientWidth;
+//                $scope.svgObj.height = $scope.svgPaper.clientHeight;
+
+
 
                 // todo take form attr and apply an onChange?
                 $scope.textX = $scope.svgPaper.clientWidth - 90;
-//                //$scope.svgObj.width - 70
                 $scope.textY = $scope.svgPaper.clientHeight - 25;
             });
-
-
-
-
-            /*
-             $scope.lineObjects = [ {
-             x1:  0,
-             y1:  0,
-             x2: 100,
-             y2: 100,
-             strokeColor: "red"
-             },{
-             x1:  100,
-             y1:  100,
-             x2:  200,
-             y2:  300,
-             strokeColor: "red"
-             },
-             {
-             x1:  0,
-             y1:  0,
-             x2: 200,
-             y2: 300,
-             strokeColor: "red"
-             }];
-             */
-
-
-            //pointless?
-            /*
-             $scope.lastLine = {
-             x1:  200,
-             y1:  300,
-             x2:  400,
-             y2:  500,
-             strokeColor: "blue"
-             };
-             $scope.lineObjects.push($scope.lastLine);*/
-
-
-        }])
-    .controller('MyCtrl2', [function () {
-
-    }]);
+        }]);

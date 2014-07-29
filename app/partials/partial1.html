@@ -22,14 +22,17 @@
                   ng-click="handleLineClick($event)"/>
 
             <text ng-attr-x="{{textX}}" ng-attr-y="{{textY}}" fill="black" stroke-width="1">
-                {{svgObj.height}},{{svgObj.width}}
+                {{svgObj.height}},{{svgPaper.clientWidth}}
             </text>
         </svg>
     </div>
     <div id="editRegion" ng-mousemove="checkRightRailHover($event)" class="">
+
+        <div id="top_info" >
+        </div>
         <div id="coords" >
             <form name="newPointFormCurve" novalidate class="" ng-submit="submitAddForm()">
-                <div class="editRowStyle row" ng-show="showCurveForm">
+                <div class="XeditRowStyle row" ng-show="showCurveForm">
                     <div class="large-6 columns">
                         <div class="label_container">
                             <span class="">start X,Y:</span>
@@ -57,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="editRegionRow editRowStyle row" ng-show="showCurveForm">
+                <div class="XeditRegionRow editRowStyle row" ng-show="showCurveForm">
                     <div class="large-3 columns">
                         <div class="label_container">
                             <span class="">xRot:</span>
@@ -97,74 +100,78 @@
                 <div class="editRegionRow_short" ng-hide="showPointsForm" ng-click="showPointsForm = !showPointsForm">
                     Show Points Form
                 </div>
-                <div class="editRegionRow_short" ng-show="showPointsForm" ng-click="showPointsForm = !showPointsForm">
+                <div class="XeditRegionRow_short" ng-show="showPointsForm" ng-click="showPointsForm = !showPointsForm">
                     Hide Points Form
                 </div>
-                <div class="editRegionRow row" ng-show="showPointsForm">
+                <div class="XeditRegionRow row editRegionRowSub" ng-show="showPointsForm">
 
                     <div class="large-2 columns">
                         x1:
                         <input type="number" ng-model="newLineObj.x1" class="newLineObjCont coord_input" name="np_x1"
                                ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
-                    <div class="large-3 columns">
+                    <div class="large-2 columns">
                         y1:
                         <input type="number" ng-model="newLineObj.y1" class="newLineObjCont coord_input" name="np_y1"
                                ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
+                    </div>
+                    <div class="large-1 columns">
                     </div>
                     <div class="large-2 columns">
                         x2:
                         <input type="number" ng-model="newLineObj.x2" class="newLineObjCont coord_input" name="np_x2"
                                ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
-                    <div class="large-3 columns">
+                    <div class="large-2 columns">
                         y2:
                         <input type="number" ng-model="newLineObj.y2" class="newLineObjCont coord_input" name="np_y2"
                                ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
-                    <div ng-show="(!newPointForm.np_x1.$valid || !newPointForm.np_y1.$valid || !newPointForm.np_x2.$valid  || !newPointForm.np_y2.$valid )" class="formAlert large-2 columns">
+                    <div ng-show="(!newPointForm.np_x1.$valid || !newPointForm.np_y1.$valid || !newPointForm.np_x2.$valid  || !newPointForm.np_y2.$valid )" class="formAlert large-3 columns">
                         <span class="ccError">Oops position out of bounds</span>
                     </div>
                     <div class="clearer"></div>
                 </div>
                 <div class="editRegionRow" ng-show="showPointsForm">
-                    <div class="">
-                        <button type="button" id="submit" class="red_Button cancelButton add_point_button"
-                                ng-click="submitAddForm()">Add Line
-                        </button>
-                        <!--type="submit"-->
-                        <button type="button" class="red_Button cancelButton add_point_button"
-                                ng-click="convertSegment()">Convert Line
+                    <div class="button_holder">
+                        <button type="button" id="submit" class="red_Button cancelButton add_point_button" ng-click="submitAddForm()">
+                            Add Line
                         </button>
                     </div>
+                    <!--type="submit"-->
                 </div>
-                <div class="modes_region" ng-click="checkPathMode()">
+            </form>
+            <div class="XeditRegionRow row">
+                <div class="modes_region large-6 columns" ng-click="checkPathMode()">
 
                     <rcp-radio selection="path"    label="Path Mode" selection-name="currentMode" is-checked="true"></rcp-radio>
                     <rcp-radio selection="segment" label="Segment Mode" selection-name="currentMode" ></rcp-radio>
                     <rcp-radio selection="convert" label="Convert Mode" selection-name="currentMode" ></rcp-radio>
+                    <button type="button" class="red_Button cancelButton add_point_button" ng-click="convertSegment()" ng-show="(drawMode == 'convert')">
+                        Convert Line
+                    </button>
 
                 </div>
-            </form>
-            <div id="coordsList">
-                <div ng-click="togglePointsTable()" class="tempButton">
-                    <h2> {{ hidePointsLabel }} </h2>
+                <div id="coordsList large-6 columns">
+                    <div ng-click="togglePointsTable()" class="tempButton">
+                        <h4> {{ hidePointsLabel }} </h4>
+                    </div>
+                    <table class="XcoordsTable" ng-show="hidePoints">
+                        <tr>
+                            <!--<th>step #</th>-->  <!--TODO: add counter?-->
+                            <th>x1</th>
+                            <th>y1</th>
+                            <th>x2</th>
+                            <th>y2</th>
+                        </tr>
+                        <tr ng-repeat="lineObj in lineObjects">
+                            <td> {{lineObj.x1}}</td>
+                            <td> {{lineObj.y1}}</td>
+                            <td> {{lineObj.x2}}</td>
+                            <td> {{lineObj.y2}}</td>
+                        </tr>
+                    </table>
                 </div>
-                <table class="coordsTable" ng-show="hidePoints">
-                    <tr>
-                        <!--<th>step #</th>-->  <!--TODO: add counter?-->
-                        <th>x1</th>
-                        <th>y1</th>
-                        <th>x2</th>
-                        <th>y2</th>
-                    </tr>
-                    <tr ng-repeat="lineObj in lineObjects">
-                        <td> {{lineObj.x1}}</td>
-                        <td> {{lineObj.y1}}</td>
-                        <td> {{lineObj.x2}}</td>
-                        <td> {{lineObj.y2}}</td>
-                    </tr>
-                </table>
             </div>
             <div id="debug_region">
 

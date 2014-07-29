@@ -38,6 +38,9 @@
     init : function (scope, method, options) {
       $.extend(true, this.settings, method, options);
       this.bindings(method, options);
+
+        console.log("reveal init-ed!")
+
     },
 
     events : function (scope) {

@@ -62,8 +62,11 @@
   float:left;
     width: 100%;
 }
+#top_info {
+    width:100%;
+}
 #coordsList {
-  width: 100%;
+  min-width: 200px;
   position: static;
   
   float:left;
@@ -97,6 +100,11 @@ li.coordsText {
   float:left;
   position: relative;
 }
+.editRegionRowSub {
+
+    position: relative;
+}
+
 .editRegionRow .divFormLong {
   width: 115px;
   height: 100%;
@@ -129,8 +137,9 @@ li.coordsText {
     font-size: 12px;
 }
 .editRegionRow .coord_input,
-.editRowStyle .coord_input {
-    width: 45px;
+.editRowStyle .coord_input,
+.editRegionRowSub .coord_input {
+    min-width: 45px;
     font-size: .7rem;
     padding: 5px;
 }
@@ -154,9 +163,13 @@ li.coordsText {
     margin: 5px 3px 15px 3px;
 }
 .double_number_container {
-    width:90px;
+    min-width:90px;
+    max-width:120px;
     height: 45px;
-    /*43?*/
+
+}
+.double_number_container .coord_input {
+    max-width: 60px;
 }
 .coordsTable, 
 .coordsTable td {
@@ -220,7 +233,7 @@ li.coordsText {
 }
 .modes_region {
     margin-top:15px;
-
+    min-width: 200px;
 }
 
 .modes_region .switch {
@@ -235,8 +248,15 @@ li.coordsText {
     margin: 8px 0 0 5px;
 }
 
-.add_point_button {
-    margin-left: 30px;
+.editRegionRow .button_holder {
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.editRegionRow .add_point_button {
+
+
+    width: 100px;
 }
 
 .fromButton {
@@ -245,7 +265,7 @@ li.coordsText {
 .formAlert {
   /*display:none;*/
 }
-.editRegionRow .formAlert {
+.formAlert {
   /*width:  132px;*/
   /*height: 54px;*/
   margin: 5px 0 0 5px;
