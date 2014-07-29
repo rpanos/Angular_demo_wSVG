@@ -4,7 +4,7 @@
  *
  *          Directives
  *
- *  The min/max directives are borrowed, the radio one is mine wile utilizing css from foundationCSS.
+ *  The min/max/preventDefault directives are borrowed, the radio one is mine wile utilizing css from foundationCSS.
  *
  */
 
@@ -38,6 +38,38 @@ angular.module('myApp.directives', []).
             }
         };
     }]).
+    directive('preventDefault', function() {
+        return function(scope, element, attrs) {
+            angular.element(element).bind('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+            });
+        }
+    }).
+    directive('resizable', function($window) {
+        return function($scope) {
+            return angular.element($window).bind('resize', function() {
+                $scope.resetSizeAtt();
+                return $scope.$apply();
+            });
+        };
+    }).
+//    directive('resizeWatch', ['$window', function($window) {
+//        return {
+//            restrict: 'A',
+//            link: function ($scope, elem, attr, ctrl) {
+//                $scope.$watch(
+//                    function () {
+//                        return [elem.clientWidth, elem.clientHeight].join('x');
+//                    },
+//                    function (value) {
+//                        console.log('directive got resized:', value.split('x'));
+//                    }
+//                )
+//            }
+//        }
+//
+//    }]).
     directive('ngMax', ['utilService', function (utilService) {
         return {
             restrict: 'A',

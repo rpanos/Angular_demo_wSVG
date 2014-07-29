@@ -1,5 +1,5 @@
-<div id="drawRoot"  ng-mousemove="checkAllHover($event)" class="">
-    <div id="paperContainer" class="">
+<div id="drawRoot"  ng-mousemove="checkAllHover($event)" class="" data-ng-init="init()">
+    <div id="paperContainer" resize-watch resizable class="">
         <svg id="paper" ng-click="handlePaperClick($event)"  ng-mousemove="checkPaperHover($event)" stroke="grey" stroke-width="5" xmlns="http://www.w3.org/2000/svg">
 
             <rect x=0 y=0 ng-attr-height="{{svgObj.height}}" ng-attr-width="{{svgObj.width}}" />
@@ -9,7 +9,7 @@
                   ng-hover="handleRadiusLineHover($event)"/>
 
             <path id="newArc"
-                  ng-attr-d="M{{ arcObj.x1 }},{{ arcObj.y1 }}  A{{arcObj.rx}},{{arcObj.ry}} {{arcObj.angle}} {{arcObj.largeArcFlag}},{{arcObj.sweepFlag}} {{arcObj.x2}},{{arcObj.y2}}"
+                  ng-attr-d="M{{ arcObj.x1 }},{{ arcObj.y1 }}  A {{arcObj.radiusx}},{{arcObj.radiusy}} {{arcObj.angle}} {{arcObj.largeArcFlag}},{{arcObj.sweepFlag}} {{arcObj.x2}},{{arcObj.y2}}"
                   stroke="{{guide.strkColor}}" stroke-width="{{guide.strkWdth}}"/>
 
             <line id="newLineObj_line" ng-show="newPointForm.$valid" ng-attr-x1="{{newLineObj.x1}}"
@@ -32,7 +32,7 @@
         </div>
         <div id="coords" >
             <form name="newPointFormCurve" novalidate class="" ng-submit="submitAddForm()">
-                <div class="XeditRowStyle row" ng-show="showCurveForm">
+                <div class="XeditRowStyle row" >
                     <div class="large-6 columns">
                         <div class="label_container">
                             <span class="">start X,Y:</span>
@@ -51,16 +51,16 @@
                             <span class="">rad X,Y:</span>
                         </div>
                         <div class="double_number_container">
-                            <input type="number" ng-model="arcObj.rx" class="newLineObjCont coord_input float_lft"
+                            <input type="number" ng-model="arcObj.radiusx" class="newLineObjCont coord_input float_lft"
                                    name="np_rx"
                                    ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
-                            <input type="number" ng-model="arcObj.ry" class="newLineObjCont coord_input float_lft"
+                            <input type="number" ng-model="arcObj.radiusy" class="newLineObjCont coord_input float_lft"
                                    name="np_ry"
                                    ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                         </div>
                     </div>
                 </div>
-                <div class="XeditRegionRow editRowStyle row" ng-show="showCurveForm">
+                <div class="XeditRegionRow editRowStyle row" >
                     <div class="large-3 columns">
                         <div class="label_container">
                             <span class="">xRot:</span>
@@ -97,13 +97,7 @@
                 </div>
             </form>
             <form name="newPointForm" novalidate class="" ng-submit="submitAddForm()">
-                <div class="editRegionRow_short" ng-hide="showPointsForm" ng-click="showPointsForm = !showPointsForm">
-                    Show Points Form
-                </div>
-                <div class="XeditRegionRow_short" ng-show="showPointsForm" ng-click="showPointsForm = !showPointsForm">
-                    Hide Points Form
-                </div>
-                <div class="XeditRegionRow row editRegionRowSub" ng-show="showPointsForm">
+                <div class="row editRegionRowSub" >
 
                     <div class="large-2 columns">
                         x1:
@@ -127,8 +121,8 @@
                         <input type="number" ng-model="newLineObj.y2" class="newLineObjCont coord_input" name="np_y2"
                                ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
-                    <div ng-show="(!newPointForm.np_x1.$valid || !newPointForm.np_y1.$valid || !newPointForm.np_x2.$valid  || !newPointForm.np_y2.$valid )" class="formAlert large-3 columns">
-                        <span class="ccError">Oops position out of bounds</span>
+                    <div ng-show="( newPointForm.$pristine  && (!newPointForm.np_x1.$valid || !newPointForm.np_y1.$valid || !newPointForm.np_x2.$valid  || !newPointForm.np_y2.$valid ))" class="formAlert large-3 columns">
+                        <span class="ccError">Oops position out of bounds{{newPointForm.$pristine }}</span>
                     </div>
                     <div class="clearer"></div>
                 </div>
@@ -154,9 +148,9 @@
                 </div>
                 <div id="coordsList large-6 columns">
                     <div ng-click="togglePointsTable()" class="tempButton">
-                        <h4> {{ hidePointsLabel }} </h4>
+                        <a class="button tiny radius">{{ hidePointsLabel }}</a>
                     </div>
-                    <table class="XcoordsTable" ng-show="hidePoints">
+                    <table ng-show="hidePoints">
                         <tr>
                             <!--<th>step #</th>-->  <!--TODO: add counter?-->
                             <th>x1</th>

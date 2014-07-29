@@ -8,20 +8,12 @@ angular.module('myApp.controllers', []).
     /*
      todos
 
-     - move away from foundation bc it requires jquery
-
-
-     - "new line" goes invisible when above not-paper and then re-greys at paper = easy!
-        - remove Label business?
-     - Test sweepFlag more - maybe set dynamically?
-
-     - possibly remove inclickmode - OR NO!!
      - move some MORE logic to services
      - Maybe just remove valid for coords completely
-     - maybe wrote a directive to show a "swicth" - but start with select
 
      - move labels into one object
-     - remove all of init not needed
+     - move more inits to services
+     - Document code!
 
 
      */
@@ -30,75 +22,17 @@ angular.module('myApp.controllers', []).
         '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'LineDataService',           //'$watch', '$window',
         function ($scope, $rootScope, $location, arcCalcService, domService, LineDataService) {          //$watch, $window,
 
-            console.debug("YUP");
-            $scope.hidePoints = false;
-            $scope.hidePointsLabel = "Show Points";
-            $scope.pathMode = true;
-            $scope.pathModeLabel = "Path Mode";
-            $scope.pathModeClass = "PathMode";  // TODO complete or remove - in index.html
-            $scope.showPointsForm = true;
-            $scope.showCurveForm = true;
 
-            $scope.mode_switch = "path";
-
-            $scope.trueVal = true;   //TODO: find better sol
-            $scope.falseVal = true;
-
-            LineDataService.newLineObj = {};  //TODO MOOT?
-            $scope.clickLineObj = {};
-            $scope.lastLine = {};//pointless?
-
-            $scope.lineObjects = LineDataService.lineObjects;  //moot?
-
-            //TEMP!!!
-            $scope.inClickMode = true;  //CONSIDER another method
-            LineDataService.firstPointSet = false;  //TODO  MOOT?! def set in service?
-            $scope.isHovering = true;
-            //set elsewhere?
-            $scope.clickLineObj.strokeColor = "blue";
-
-            //TODO make an obj
-//            $scope.yStart = 0
-//            $scope.xStart = 0
-//            $scope.yEnd = 0
-//            $scope.xEnd = 0
-//            $scope.svgChange = function() {
-//                //$scope.svgObj.width = $scope.selectedElem.attr("offsetwidth");
-//                $scope.svgObj.width = event.offsetwidth;
-//
-//            };
-            //Service?
-            $scope.svgObj = {
-//                width: 900,
-                width: '100%',
-                height: 750,
-                strkColor: "grey",
-                strkWdth: 5
-            };
-
-//            $scope.$watch(function(){
-//                return $window.innerWidth;
-//            }, function(value) {
-//                console.log("innerWidth: " + value);
-//            });
-
-            $scope.updateSwitchText = function() {
-                console.log("--> mode_switch: " + $scope.mode_switch);
-
-                console.log("--> newPointForm: "); console.log($scope.newPointForm);
-
-            };
 
             $scope.resetFromPathMode = function (event) {
                 LineDataService.firstPointSet = false;
-                //LineDataService.
                 $scope.newLineObj = LineDataService.giveBlankLineObj();
             };
 
             /*
              * IFF a click set has begun, let the line draw in anticipation
              *
-             * TODO move both of these to the service?
+             * TODO move some of this logic to a service?
              */
             $scope.checkPaperHover = function (event) {
                 if ( $scope.inClickMode && LineDataService.firstPointSet  ) {  //$scope.newPointForm.$valid &&
@@ -113,16 +47,8 @@ angular.module('myApp.controllers', []).
                     $scope.newLineObj.y2 = $scope.newLineObj.y1;
                 }
             }
-            $scope.checkAllHover = function (event) {
 
-                //TODO - finish service
-//                if (! domService.checkAscendants(event.target, possibleParent, termParent) ) {
-//                        $scope.lineObjects.x2 = $scope.newLineObj.x1;
-//                        $scope.newLineObj.y2 = $scope.newLineObj.y1;
-//                        $scope.overPaper = false;
-//                    }
-            };
-
+            // For debug only
             $scope.checkForm = function () {
                 if (!$scope.newPointForm.$valid) {
                     //$scope.svgObj.strkWdth = 0;
@@ -135,11 +61,8 @@ angular.module('myApp.controllers', []).
             };
 
             $scope.handlePaperClick = function (event) {
-                //console.debug("!!!! handlePaperClick event", event);
-                console.debug("!!****!! handlePaperClick STATE:", $scope.inClickMode, LineDataService.firstPointSet);
-                                // (newLineObj, inClickMode, pathMode, validForm, event)
+                // Deliberate de-coupling
                 $scope.newLineObj = LineDataService.newPoint($scope.newLineObj, $scope.inClickMode, $scope.pathMode, $scope.newPointForm.$valid, event);
-
             };
 
             $scope.handleLineClick = function (event) {
@@ -152,11 +75,8 @@ angular.module('myApp.controllers', []).
                 $scope.selectedElem.attr("stroke", "orange");
                 $scope.selectedElem.attr("stroke-width", "2");
             };
-            $scope.confirmdrawMode = function(){
-                console.log("### drawMode: " + $scope.drawMode);
-            };
+
             $scope.$watch('drawMode', function() {
-                console.log("## __2__ # drawMode: " + $scope.drawMode);
                 if ($scope.drawMode == 'path') {
                     $scope.inClickMode = true;
                     $scope.pathMode = true;
@@ -191,10 +111,9 @@ angular.module('myApp.controllers', []).
                 } catch (e) {
                     console.debug("ISSUE in convertSegment: " + e.message)
                 }
-
             };
             $scope.handleRadiusLineClick = function () {
-
+                //TBD
             }
 
             /**
@@ -205,9 +124,7 @@ angular.module('myApp.controllers', []).
              * @return {Circle} The new Circle object.
              */
             $scope.submitAddForm = function (fromPrev) {
-
                 fromPrev = fromPrev || $scope.pathMode;
-
                 if ($scope.newPointForm.$valid) {
 
                     $scope.newLineObj=LineDataService.addLine(angular.copy($scope.newLineObj), fromPrev);
@@ -217,23 +134,14 @@ angular.module('myApp.controllers', []).
                     console.debug($scope.lineObjects);
 
                 }
-
             };
 
             /*****
              *
-             * All the toggle silliness
+             *
              *
              *
              */
-            $scope.togglePointsForm = function () {
-                $scope.showPointsForm = !$scope.showPointsForm;
-                if ($scope.hidePoints) {
-
-                } else {
-
-                };
-            };
             $scope.togglePointsTable = function () {
                 $scope.hidePoints = !$scope.hidePoints;
                 if ($scope.hidePoints) {
@@ -241,24 +149,57 @@ angular.module('myApp.controllers', []).
                 } else {
                     $scope.hidePointsLabel = "Show Points";
                 }
+                console.log("## togglePointsTable now: " + $scope.hidePointsLabel);
             };
 
-            angular.element(document).ready(function () {
-                /// "INIT"
-                $scope.resetFromPathMode();
-
-                $scope.svgPaper = angular.element(document.body.querySelector("#paper"))[0];
-                console.log("$$$$$ HAVE: " + $scope.svgPaper.clientWidth );
-                console.log($scope.svgPaper);
-
+            $scope.resetSizeAtt = function () {
                 // NOTE: The user can change the size!
-//                $scope.svgObj.width = $scope.svgPaper.clientWidth;
-//                $scope.svgObj.height = $scope.svgPaper.clientHeight;
+                $scope.svgObj.width = $scope.svgPaper.clientWidth;
+                $scope.svgObj.height = $scope.svgPaper.clientHeight;
 
-
-
-                // todo take form attr and apply an onChange?
                 $scope.textX = $scope.svgPaper.clientWidth - 90;
                 $scope.textY = $scope.svgPaper.clientHeight - 25;
+            };
+
+            $scope.init = function() {
+                //move to a service?
+                $scope.svgObj = {
+                    width: '100%',
+                    height: '650px',
+                    strkColor: "grey",
+                    strkWdth: 5
+                };
+                $scope.guide = arcCalcService.initGuide;
+                $scope.arcObj = arcCalcService.giveInitArc(); //initArcObj;
+                $scope.arcObj.radiusx = 400;
+                $scope.arcObj.radiusy = 400;
+
+                $scope.hidePoints = false;
+                $scope.hidePointsLabel = "Show Points";
+
+                $scope.mode_switch = "path";
+                $scope.pathMode = true;
+                $scope.isHovering = true;
+                $scope.inClickMode = true
+
+                //LineDataService.newLineObj = {};  //TODO MOOT?
+                $scope.lineObjects = LineDataService.lineObjects;
+
+                $scope.newLineObj = LineDataService.initNewLineObj;
+
+                //set elsewhere?
+                $scope.clickLineObj = {};
+                $scope.clickLineObj.strokeColor = "blue";
+
+            }
+
+
+            angular.element(document).ready(function () {
+                $scope.resetFromPathMode();
+                $scope.svgPaper = angular.element(document.body.querySelector("#paper"))[0];
+                $scope.resetSizeAtt();
+
+
+
             });
         }]);
