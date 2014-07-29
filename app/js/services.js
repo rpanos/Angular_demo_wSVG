@@ -23,7 +23,7 @@ angular.module('myApp.services', []).
         }
         return funcs;
   }).
-    factory('SVGDataService', function(){
+    factory('LineDataService', function(){
 
         var funcs = {
             firstPointSet: false,
@@ -60,7 +60,11 @@ angular.module('myApp.services', []).
             } else {
                 //this.
                 var newLineObj = {
-                    strokeColor : "blue"
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 0,
+                    strokeColor : "black"
                 };
             }
             return newLineObj;
@@ -72,6 +76,7 @@ angular.module('myApp.services', []).
                 console.debug(event);
                 newLineObj.x1 = event.offsetX;
                 newLineObj.y1 = event.offsetY;
+                newLineObj.strokeColor = "orange";
 
                 this.firstPointSet = true;
                 console.debug("!!$$$!! SET handlePaperClick STATE:", inClickMode, this.firstPointSet);
@@ -150,7 +155,6 @@ angular.module('myApp.services', []).
             //if (cx == 0 || cy ==0) {
                //chord??
             this.guide.angle = Math.atan2(Math.abs(this.guide.y1-this.guide.y2), Math.abs(this.guide.x1-this.guide.x2)  )
-
             //}
         };
 

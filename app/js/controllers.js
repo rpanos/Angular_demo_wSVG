@@ -8,7 +8,6 @@ angular.module('myApp.controllers', []).
     /*
      todos
 
-     - MODES IN A DROP DOWN!
      - "new line" goes invisible when above not-paper and then re-greys at paper = easy!
         - remove Label business?
      - Test sweepFlag more - maybe set dynamically?
@@ -25,8 +24,8 @@ angular.module('myApp.controllers', []).
      */
 
     controller('DrawController', [
-        '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'SVGDataService',           //'$watch', '$window',
-        function ($scope, $rootScope, $location, arcCalcService, domService, SVGDataService) {          //$watch, $window,
+        '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'LineDataService',           //'$watch', '$window',
+        function ($scope, $rootScope, $location, arcCalcService, domService, LineDataService) {          //$watch, $window,
 
             console.debug("YUP");
             $scope.hidePoints = false;
@@ -42,15 +41,15 @@ angular.module('myApp.controllers', []).
             $scope.trueVal = true;   //TODO: find better sol
             $scope.falseVal = true;
 
-            SVGDataService.newLineObj = {};  //TODO MOOT?
+            LineDataService.newLineObj = {};  //TODO MOOT?
             $scope.clickLineObj = {};
             $scope.lastLine = {};//pointless?
 
-            $scope.lineObjects = SVGDataService.lineObjects;  //moot?
+            $scope.lineObjects = LineDataService.lineObjects;  //moot?
 
             //TEMP!!!
             $scope.inClickMode = true;  //CONSIDER another method
-            SVGDataService.firstPointSet = false;  //TODO  MOOT?! def set in service?
+            LineDataService.firstPointSet = false;  //TODO  MOOT?! def set in service?
             $scope.isHovering = true;
             //set elsewhere?
             $scope.clickLineObj.strokeColor = "blue";
@@ -88,9 +87,9 @@ angular.module('myApp.controllers', []).
             };
 
             $scope.resetFromPathMode = function (event) {
-                SVGDataService.firstPointSet = false;
-                //SVGDataService.
-                $scope.newLineObj = SVGDataService.giveBlankLineObj();
+                LineDataService.firstPointSet = false;
+                //LineDataService.
+                $scope.newLineObj = LineDataService.giveBlankLineObj();
             };
 
             /*
@@ -99,14 +98,14 @@ angular.module('myApp.controllers', []).
              * TODO move both of these to the service?
              */
             $scope.checkPaperHover = function (event) {
-                if ( $scope.inClickMode && SVGDataService.firstPointSet  ) {  //$scope.newPointForm.$valid &&
+                if ( $scope.inClickMode && LineDataService.firstPointSet  ) {  //$scope.newPointForm.$valid &&
                     $scope.newLineObj.x2 = event.offsetX;
                     $scope.newLineObj.y2 = event.offsetY;
                 }
             }
             //this is temp over a more all encopassing service that determines hover_paper vs hover_not_paper
             $scope.checkRightRailHover = function (event) {
-                if ($scope.inClickMode && SVGDataService.firstPointSet ) {
+                if ($scope.inClickMode && LineDataService.firstPointSet ) {
                     $scope.newLineObj.x2 = $scope.newLineObj.x1;
                     $scope.newLineObj.y2 = $scope.newLineObj.y1;
                 }
@@ -134,9 +133,9 @@ angular.module('myApp.controllers', []).
 
             $scope.handlePaperClick = function (event) {
                 //console.debug("!!!! handlePaperClick event", event);
-                console.debug("!!****!! handlePaperClick STATE:", $scope.inClickMode, SVGDataService.firstPointSet);
+                console.debug("!!****!! handlePaperClick STATE:", $scope.inClickMode, LineDataService.firstPointSet);
                                 // (newLineObj, inClickMode, pathMode, validForm, event)
-                $scope.newLineObj = SVGDataService.newPoint($scope.newLineObj, $scope.inClickMode, $scope.pathMode, $scope.newPointForm.$valid, event);
+                $scope.newLineObj = LineDataService.newPoint($scope.newLineObj, $scope.inClickMode, $scope.pathMode, $scope.newPointForm.$valid, event);
 
             };
 
@@ -208,10 +207,10 @@ angular.module('myApp.controllers', []).
 
                 if ($scope.newPointForm.$valid) {
 
-                    $scope.newLineObj=SVGDataService.addLine(angular.copy($scope.newLineObj), fromPrev);
+                    $scope.newLineObj=LineDataService.addLine(angular.copy($scope.newLineObj), fromPrev);
                     console.debug("RETURNED NEW obj:" + $scope.newLineObj.x1);
                     console.debug( $scope.newLineObj );
-                    $scope.lineObjects = SVGDataService.lineObjects;  //TODO .getLineObjects();
+                    $scope.lineObjects = LineDataService.lineObjects;  //TODO .getLineObjects();
                     console.debug($scope.lineObjects);
 
                 }
