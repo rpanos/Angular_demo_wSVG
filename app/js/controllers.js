@@ -165,7 +165,7 @@ angular.module('myApp.controllers', []).
                     strkWdth: 5
                 };
                 $scope.guide = arcCalcService.initGuide;
-                $scope.arcObj = arcCalcService.giveInitArc(); //initArcObj;
+                $scope.arcObj = arcCalcService.giveInitArc();
                 $scope.arcObj.radiusx = 400;
                 $scope.arcObj.radiusy = 400;
 
@@ -177,7 +177,6 @@ angular.module('myApp.controllers', []).
                 $scope.isHovering = true;
                 $scope.inClickMode = true
 
-                //LineDataService.newLineObj = {};  //TODO MOOT?
                 $scope.lineObjects = LineDataService.lineObjects;
 
                 $scope.newLineObj = LineDataService.initNewLineObj;

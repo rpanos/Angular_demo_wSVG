@@ -40,10 +40,6 @@ angular.module('myApp.services', []).
             }
         };
 
-        funcs.getLineObjects = function () {  //todo moot?
-            this.lineObjects;
-        };
-
         funcs.addLine = function (lineObj, fromPrev) {
             lineObj.strokeColor = "red";
             this.lineObjects.push(lineObj);
@@ -89,14 +85,12 @@ angular.module('myApp.services', []).
                     } else {
                         console.debug(" NOT VALID FORM!!!");
                     }
-                    //BUT now we want temp line gone?
                 } else {
                     console.debug("ERROR in handleClick", inClickMode, this.firstPointSet);
                 }
             } catch (e) {
                 console.debug("ISSUE in newPoint: " + e.message)
             }
-            //could return newLineObj but dont have too.
             return newLineObj;
         };
 
@@ -148,9 +142,6 @@ angular.module('myApp.services', []).
 
         };
 
-        // var cx1, cy1, cx2, cy2, gx1, y1, x2, gy2, xc= 0, yc= 0;
-
-        //Possibly Moot
         funcs.setGuidePoints = function (gx1, gy1, gx2, gy2) {
             this.guide.x1 = gx1;
             this.guide.y1 = gy1;
