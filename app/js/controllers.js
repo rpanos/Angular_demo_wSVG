@@ -17,8 +17,8 @@ angular.module('myApp.controllers', []).
      */
 
     controller('DrawController', [
-        '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'LineDataService',           //'$watch', '$window',
-        function ($scope, $rootScope, $location, arcCalcService, domService, LineDataService) {          //$watch, $window,
+        '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'LineDataService', '$window',           //'$watch', '$window',
+        function ($scope, $rootScope, $location, arcCalcService, domService, LineDataService, $window) {          //$watch, $window,
             $scope.resetFromPathMode = function (event) {
                 LineDataService.firstPointSet = false;
                 $scope.newLineObj = LineDataService.giveBlankLineObj();
@@ -184,6 +184,15 @@ angular.module('myApp.controllers', []).
                 //set elsewhere?
                 $scope.clickLineObj = {};
                 $scope.clickLineObj.strokeColor = "blue";
+
+                var userAgent = $window.navigator.userAgent;
+
+                $scope.isFFox = (userAgent.indexOf("Firefox")!=-1);
+                if ($scope.isFFox) {
+                    console.log("FFOX!" + userAgent);
+                } else {
+                    console.log("NOT FFOX!" + userAgent);
+                }
 
             };
 

@@ -108,7 +108,9 @@ angular.module('myApp.directives', []).
                     }
 
                     element.on('click', function (event) {
-                        var inputElem = angular.element(event.srcElement.parentElement).find("input")[0];
+                        //var inputElem = angular.element(event.srcElement.parentElement).find("input")[0];
+                        // For crossbrowser TODO confirm this!
+                        var inputElem = angular.element(event.target.parentElement).find("input")[0];
                         if (!inputElem.checked) {
                             inputElem.checked = true;
                             $scope.$parent.drawMode = angular.element(inputElem).attr("value");

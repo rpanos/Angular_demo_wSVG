@@ -61,6 +61,7 @@
 #paper {
   float:left;
   width: 100%;
+    min-height: 500px;
 }
 #top_info {
     width:100%;
@@ -232,7 +233,7 @@ li.coordsText {
 }
 .modes_region {
     margin-top:15px;
-    min-width: 200px;
+    min-width: 210px;
 }
 
 .modes_region .switch {
