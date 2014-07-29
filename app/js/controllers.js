@@ -17,8 +17,8 @@ angular.module('myApp.controllers', []).
      */
 
     controller('DrawController', [
-        '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'LineDataService', '$window',           //'$watch', '$window',
-        function ($scope, $rootScope, $location, arcCalcService, domService, LineDataService, $window) {          //$watch, $window,
+        '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'LineDataService', '$window', 'utilService',          //'$watch', '$window',
+        function ($scope, $rootScope, $location, arcCalcService, domService, LineDataService, $window, utilService) {          //$watch, $window,
             $scope.resetFromPathMode = function (event) {
                 LineDataService.firstPointSet = false;
                 $scope.newLineObj = LineDataService.giveBlankLineObj();
@@ -30,6 +30,9 @@ angular.module('myApp.controllers', []).
              * TODO move some of this logic to a service?
              */
             $scope.checkPaperHover = function (event) {
+
+                event = utilService.fixEvent(event);
+
                 if ( $scope.inClickMode && LineDataService.firstPointSet  ) {  //$scope.newPointForm.$valid &&
                     $scope.newLineObj.x2 = event.offsetX;
                     $scope.newLineObj.y2 = event.offsetY;
@@ -101,7 +104,8 @@ angular.module('myApp.controllers', []).
 
                     $scope.chord = arcCalcService.chord;
                     $scope.guide = arcCalcService.guide;
-                    $scope.arcObj = arcCalcService.arcObj;
+                    //This is a complete replace!
+                    $scope.currArcObj = arcCalcService.arcObj;
 
                 } catch (e) {
                     console.debug("ISSUE in convertSegment: " + e.message)
@@ -166,12 +170,7 @@ angular.module('myApp.controllers', []).
                     strkWdth: 5
                 };
                 $scope.guide = arcCalcService.initGuide;
-                $scope.arcObj = arcCalcService.giveInitArc();
-                $scope.arcObj.radiusy = 400;
-
-                //TEMP
-                $scope.ALTarcObj = {};
-                $scope.ALTarcObj.radiusx = 400;
+                $scope.currArcObj = arcCalcService.giveInitArc();
 
                 $scope.hidePoints = false;
                 $scope.hidePointsLabel = "Show Points";
@@ -191,6 +190,7 @@ angular.module('myApp.controllers', []).
 
                 var userAgent = $window.navigator.userAgent;
 
+                $scope.fFoxIsFunctional = true;
                 $scope.isFFox = (userAgent.indexOf("Firefox")!=-1);
                 if ($scope.isFFox) {
                     console.log("FFOX!" + userAgent);
@@ -199,7 +199,6 @@ angular.module('myApp.controllers', []).
                 } else {
                     console.log("NOT FFOX!" + userAgent);
                 }
-
             };
 
             angular.element(document).ready(function () {

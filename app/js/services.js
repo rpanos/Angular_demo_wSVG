@@ -10,10 +10,25 @@ angular.module('myApp.services', []).
         return {
             isEmpty: function (value) {
                 return angular.isUndefined(value) || value === '' || value === null || value !== value;
+            },
+            findSVGElement: function(event){
+                var node = event.target.parentNode;
+                while( node.id != 'paper' ) {
+                    //node = node.parent();
+                    node = node.parentNode;
+                }
+                return node;
+            },
+            fixEvent: function( event ){
+                if(event.offsetX==undefined) // this works for Firefox
+                {
+                    event.offsetX = event.layerX;
+                    event.offsetY = event.layerY;
+                }
+                return event;
             }
         }
     }).
-
     // This is very TBD
     factory('domService', function () {
         var funcs = {
@@ -25,7 +40,7 @@ angular.module('myApp.services', []).
         }
         return funcs;
     }).
-    factory('LineDataService', function () {
+    factory('LineDataService', ['utilService', function (utilService) {
 
         var funcs = {
             firstPointSet: false,
@@ -68,6 +83,9 @@ angular.module('myApp.services', []).
         };
         funcs.newPoint = function (newLineObj, inClickMode, pathMode, validForm, event) { //$scope.inClickMode
             try {
+
+                event = utilService.fixEvent(event);
+
                 if (inClickMode && !this.firstPointSet) {
                     newLineObj.x1 = event.offsetX;
                     newLineObj.y1 = event.offsetY;
@@ -86,7 +104,8 @@ angular.module('myApp.services', []).
                         console.debug(" NOT VALID FORM!!!");
                     }
                 } else {
-                    console.debug("ERROR in handleClick", inClickMode, this.firstPointSet);
+                    // Also true in non-inClickMode
+                    //console.debug("ERROR in handleClick", inClickMode, this.firstPointSet);
                 }
             } catch (e) {
                 console.debug("ISSUE in newPoint: " + e.message)
@@ -103,7 +122,7 @@ angular.module('myApp.services', []).
             }
         }
         return funcs;
-    }).
+    }]).
     factory('arcCalcService', function () {
 
         var funcs = {
@@ -126,7 +145,10 @@ angular.module('myApp.services', []).
             y2: 1,
             largeArcFlag: 0,
             sweepFlag: 1,
-            angle: 0
+            angle: 0,
+
+            radiusx: 400,
+            radiusy: 400
         };
 
         funcs.giveInitArc = function () {
