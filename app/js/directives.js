@@ -4,7 +4,7 @@
  *
  *          Directives
  *
- *  The min/max/preventDefault directives are borrowed, the radio one is mine wile utilizing css from foundationCSS.
+ *  The min/max/preventDefault directives are borrowed, the radio one is mine while utilizing css from foundationCSS.
  *
  */
 
@@ -38,22 +38,6 @@ angular.module('myApp.directives', []).
             }
         };
     }]).
-    directive('preventDefault', function() {
-        return function(scope, element, attrs) {
-            angular.element(element).bind('click', function(event) {
-                event.preventDefault();
-                event.stopPropagation();
-            });
-        }
-    }).
-    directive('resizable', function($window) {
-        return function($scope) {
-            return angular.element($window).bind('resize', function() {
-                $scope.resetSizeAtt();
-                return $scope.$apply();
-            });
-        };
-    }).
     directive('ngMax', ['utilService', function (utilService) {
         return {
             restrict: 'A',
@@ -78,6 +62,22 @@ angular.module('myApp.directives', []).
             }
         };
     }]).
+    directive('preventDefault', function() {
+        return function(scope, element, attrs) {
+            angular.element(element).bind('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+            });
+        }
+    }).
+    directive('resizable', function($window) {
+        return function($scope) {
+            return angular.element($window).bind('resize', function() {
+                $scope.resetSizeAtt();
+                return $scope.$apply();
+            });
+        };
+    }).
     directive('rcpRadio', [ function () {
         return {
             restrict: 'E',

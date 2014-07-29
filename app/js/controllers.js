@@ -19,9 +19,6 @@ angular.module('myApp.controllers', []).
     controller('DrawController', [
         '$scope', '$rootScope', '$location',  'arcCalcService', 'domService', 'LineDataService',           //'$watch', '$window',
         function ($scope, $rootScope, $location, arcCalcService, domService, LineDataService) {          //$watch, $window,
-
-
-
             $scope.resetFromPathMode = function (event) {
                 LineDataService.firstPointSet = false;
                 $scope.newLineObj = LineDataService.giveBlankLineObj();
@@ -189,15 +186,11 @@ angular.module('myApp.controllers', []).
                 $scope.clickLineObj = {};
                 $scope.clickLineObj.strokeColor = "blue";
 
-            }
-
+            };
 
             angular.element(document).ready(function () {
                 $scope.resetFromPathMode();
                 $scope.svgPaper = angular.element(document.body.querySelector("#paper"))[0];
                 $scope.resetSizeAtt();
-
-
-
             });
         }]);
