@@ -54,22 +54,6 @@ angular.module('myApp.directives', []).
             });
         };
     }).
-//    directive('resizeWatch', ['$window', function($window) {
-//        return {
-//            restrict: 'A',
-//            link: function ($scope, elem, attr, ctrl) {
-//                $scope.$watch(
-//                    function () {
-//                        return [elem.clientWidth, elem.clientHeight].join('x');
-//                    },
-//                    function (value) {
-//                        console.log('directive got resized:', value.split('x'));
-//                    }
-//                )
-//            }
-//        }
-//
-//    }]).
     directive('ngMax', ['utilService', function (utilService) {
         return {
             restrict: 'A',

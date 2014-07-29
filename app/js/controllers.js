@@ -4,9 +4,8 @@
 
 angular.module('myApp.controllers', []).
 
-
     /*
-     todos
+     TODOs
 
      - move some MORE logic to services
      - Maybe just remove valid for coords completely
@@ -14,7 +13,6 @@ angular.module('myApp.controllers', []).
      - move labels into one object
      - move more inits to services
      - Document code!
-
 
      */
 
@@ -52,7 +50,7 @@ angular.module('myApp.controllers', []).
             $scope.checkForm = function () {
                 if (!$scope.newPointForm.$valid) {
                     //$scope.svgObj.strkWdth = 0;
-                    console.debug("$scope.newPointForm.$valid:", $scope.newPointForm.$valid, $scope.newPointForm.$error);
+                    //console.debug("$scope.newPointForm.$valid:", $scope.newPointForm.$valid, $scope.newPointForm.$error);
                     //$scope.newLineObj_line_class="newLineObj_line_hide";
                 } else {
                     //$scope.newLineObj_line_class="newLineObj_line_show";

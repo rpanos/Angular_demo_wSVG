@@ -6,26 +6,26 @@
 // Demonstrate how to register services
 // In this case it is a simple value service.
 angular.module('myApp.services', []).
-  factory('utilService', function() {
-    return {
-        isEmpty: function(value) {
-            return angular.isUndefined(value) || value === '' || value === null || value !== value;
+    factory('utilService', function () {
+        return {
+            isEmpty: function (value) {
+                return angular.isUndefined(value) || value === '' || value === null || value !== value;
+            }
         }
-    }
-  }).
+    }).
 
-  // This is very TBD
-  factory('domService', function() {
+    // This is very TBD
+    factory('domService', function () {
         var funcs = {
 
         };
 
-        funcs.checkAscendants = function(elem, possibleParent, termParent) {
+        funcs.checkAscendants = function (elem, possibleParent, termParent) {
             // TODO make this work using elem.parent(), etc
         }
         return funcs;
-  }).
-    factory('LineDataService', function(){
+    }).
+    factory('LineDataService', function () {
 
         var funcs = {
             firstPointSet: false,
@@ -36,27 +36,27 @@ angular.module('myApp.services', []).
                 y1: 0,
                 x2: 0,
                 y2: 0,
-                strokeColor : "black"
+                strokeColor: "black"
             }
         };
 
-        funcs.getLineObjects =function() {  //todo moot?
+        funcs.getLineObjects = function () {  //todo moot?
             this.lineObjects;
         };
 
-        funcs.addLine = function(lineObj, fromPrev) {
+        funcs.addLine = function (lineObj, fromPrev) {
             lineObj.strokeColor = "red";
             this.lineObjects.push(lineObj);
 
-        // Also add an ID to refer to later?
-        // $scope.newLineObj.id = $scope.lineObjects.length
+            // Also add an ID to refer to later?
+            // $scope.newLineObj.id = $scope.lineObjects.length
             if (fromPrev) {
                 var newLineObj = {
                     x1: lineObj.x2,
                     y1: lineObj.y2,
                     x2: lineObj.x2,
                     y2: lineObj.y2,
-                    strokeColor : "blue"
+                    strokeColor: "blue"
                 };
                 this.firstPointSet = true;
             } else {
@@ -65,12 +65,12 @@ angular.module('myApp.services', []).
                     y1: 0,
                     x2: 0,
                     y2: 0,
-                    strokeColor : "black"
+                    strokeColor: "black"
                 };
             }
             return newLineObj;
         };
-        funcs.newPoint = function(newLineObj, inClickMode, pathMode, validForm, event) { //$scope.inClickMode
+        funcs.newPoint = function (newLineObj, inClickMode, pathMode, validForm, event) { //$scope.inClickMode
             try {
                 if (inClickMode && !this.firstPointSet) {
                     newLineObj.x1 = event.offsetX;
@@ -85,9 +85,9 @@ angular.module('myApp.services', []).
                     this.firstPointSet = false;  //shuts off hover
 
                     if (validForm) {
-                        newLineObj=this.addLine(angular.copy(newLineObj), pathMode);
+                        newLineObj = this.addLine(angular.copy(newLineObj), pathMode);
                     } else {
-                        console.debug( " NOT VALID FORM!!!" );
+                        console.debug(" NOT VALID FORM!!!");
                     }
                     //BUT now we want temp line gone?
                 } else {
@@ -100,7 +100,7 @@ angular.module('myApp.services', []).
             return newLineObj;
         };
 
-        funcs.giveBlankLineObj = function() {
+        funcs.giveBlankLineObj = function () {
             return {    x1: 0,
                 y1: 0,
                 x2: 0,
@@ -110,7 +110,7 @@ angular.module('myApp.services', []).
         }
         return funcs;
     }).
-    factory('arcCalcService', function(){
+    factory('arcCalcService', function () {
 
         var funcs = {
 
@@ -135,7 +135,7 @@ angular.module('myApp.services', []).
             angle: 0
         };
 
-        funcs.giveInitArc = function() {
+        funcs.giveInitArc = function () {
             return angular.copy(this.initArcObj);
         };
 
@@ -148,20 +148,20 @@ angular.module('myApp.services', []).
 
         };
 
-       // var cx1, cy1, cx2, cy2, gx1, y1, x2, gy2, xc= 0, yc= 0;
+        // var cx1, cy1, cx2, cy2, gx1, y1, x2, gy2, xc= 0, yc= 0;
 
         //Possibly Moot
-        funcs.setGuidePoints = function(gx1, gy1, gx2, gy2) {
+        funcs.setGuidePoints = function (gx1, gy1, gx2, gy2) {
             this.guide.x1 = gx1;
             this.guide.y1 = gy1;
 
             this.guide.x2 = gx2;
             this.guide.y2 = gy2;
 
-            this.guide.angle = Math.atan2(Math.abs(this.guide.y1-this.guide.y2), Math.abs(this.guide.x1-this.guide.x2)  )
+            this.guide.angle = Math.atan2(Math.abs(this.guide.y1 - this.guide.y2), Math.abs(this.guide.x1 - this.guide.x2))
         };
 
-        funcs.setChordPoints = function(cx1, cy1, cx2, cy2) {
+        funcs.setChordPoints = function (cx1, cy1, cx2, cy2) {
 
             try {
                 this.chord.x1 = cx1;
@@ -174,16 +174,16 @@ angular.module('myApp.services', []).
 
                 // todo - using this?
                 this.chord.slope = (this.chord.y1 - this.chord.y2) / (this.chord.x1 - this.chord.x2);
-                this.guide.slope = - this.chord.slope ; // not needed?
+                this.guide.slope = -this.chord.slope; // not needed?
 
-                this.chord.angle = Math.atan2(Math.abs(this.chord.y1-this.chord.y2), Math.abs(this.chord.x1-this.chord.x2)  );
-                this.guide.angle = (Math.PI/2) - this.chord.angle;
+                this.chord.angle = Math.atan2(Math.abs(this.chord.y1 - this.chord.y2), Math.abs(this.chord.x1 - this.chord.x2));
+                this.guide.angle = (Math.PI / 2) - this.chord.angle;
 
                 var yDelt = (Math.sin(this.guide.angle) * this.guide.length);
                 var xDelt = (Math.cos(this.guide.angle) * this.guide.length);
 
-                    // x1,y1 could be on the right or the left!
-                if ((this.chord.y1 > this.chord.y2 && this.chord.x1 < this.chord.x2) || (this.chord.y1 < this.chord.y2  && this.chord.x1 > this.chord.x2)) {
+                // x1,y1 could be on the right or the left!
+                if ((this.chord.y1 > this.chord.y2 && this.chord.x1 < this.chord.x2) || (this.chord.y1 < this.chord.y2 && this.chord.x1 > this.chord.x2)) {
                     this.guide.x2 = this.guide.x1 + xDelt;
                     this.guide.y2 = this.guide.y1 + yDelt;
                 } else {
@@ -210,5 +210,5 @@ angular.module('myApp.services', []).
         };
 
         return funcs;
-  }).
-  value('version', '0.1');
+    }).
+    value('version', '0.1');
