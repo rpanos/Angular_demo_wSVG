@@ -1,183 +1,209 @@
-<div id="drawRoot"  ng-mousemove="checkAllHover($event)" class="" data-ng-init="init()">
-    <div id="paperContainer" resizable class="">
-        <svg id="paper" ng-click="handlePaperClick($event)" ng-attr-height="{{svgObj.height}}" ng-attr-width="{{svgObj.width}}"  ng-mousemove="checkPaperHover($event)" stroke="grey" stroke-width="5" xmlns="http://www.w3.org/2000/svg">
-            <!--  ng-attr-height="{{svgObj.height}}" ng-attr-width="{{svgObj.width}}"   height="500" width="500"  -->
-            <rect x=0 y=0 width="100%" height="100%" />
-            <line id="radiusLineObj_line" ng-attr-x1="{{guide.x1}}"
-                  ng-attr-y1="{{guide.y1}}" ng-attr-x2="{{guide.x2}}" ng-attr-y2="{{guide.y2}}"
-                  stroke="orange" stroke-width="2" ng-click="handleRadiusLineClick($event)"
-                  ng-hover="handleRadiusLineHover($event)"/>
+<div id="drawRoot" ng-mousemove="checkAllHover($event)" class="" data-ng-init="init()">
+<div id="paperContainer" resizable class="">
+    <svg id="paper" ng-click="handlePaperClick($event)" ng-attr-height="{{svgObj.height}}"
+         ng-attr-width="{{svgObj.width}}" ng-mousemove="checkPaperHover($event)" stroke="grey" stroke-width="5"
+         xmlns="http://www.w3.org/2000/svg">
+        <!--  ng-attr-height="{{svgObj.height}}" ng-attr-width="{{svgObj.width}}"   height="500" width="500"  -->
+        <rect x=0 y=0 width="100%" height="100%"/>
+        <line id="radiusLineObj_line" ng-attr-x1="{{guide.x1}}"
+              ng-attr-y1="{{guide.y1}}" ng-attr-x2="{{guide.x2}}" ng-attr-y2="{{guide.y2}}"
+              stroke="orange" stroke-width="2" ng-click="handleRadiusLineClick($event)"
+              ng-hover="handleRadiusLineHover($event)"/>
 
-            <path id="newArc"
-                  ng-attr-d="M{{ currArcObj.x1 }},{{ currArcObj.y1 }}  A {{currArcObj.radiusx}},{{currArcObj.radiusy}} {{currArcObj.angle}} {{currArcObj.largeArcFlag}},{{currArcObj.sweepFlag}} {{currArcObj.x2}},{{currArcObj.y2}}"
-                  stroke="{{guide.strkColor}}" stroke-width="{{guide.strkWdth}}"/>
+        <path id="newArc"
+              ng-attr-d="M{{ currArcObj.x1 }},{{ currArcObj.y1 }}  A {{currArcObj.radiusx}},{{currArcObj.radiusy}} {{currArcObj.angle}} {{currArcObj.largeArcFlag}},{{currArcObj.sweepFlag}} {{currArcObj.x2}},{{currArcObj.y2}}"
+              stroke="{{guide.strkColor}}" stroke-width="{{guide.strkWdth}}"/>
 
-            <line id="newLineObj_line" ng-show="newPointForm.$valid" ng-attr-x1="{{newLineObj.x1}}"
-                  ng-attr-y1="{{newLineObj.y1}}" ng-attr-x2="{{newLineObj.x2}}" ng-attr-y2="{{newLineObj.y2}}"
-                  stroke="{{newLineObj.strkColor}}" stroke-width="{{newLineObj.strkWdth}}"
-                  ng-click="handleLineClick($event)"/>
+        <line id="newLineObj_line" ng-show="newPointForm.$valid" ng-attr-x1="{{newLineObj.x1}}"
+              ng-attr-y1="{{newLineObj.y1}}" ng-attr-x2="{{newLineObj.x2}}" ng-attr-y2="{{newLineObj.y2}}"
+              stroke="{{newLineObj.strkColor}}" stroke-width="{{newLineObj.strkWdth}}"
+              ng-click="handleLineClick($event)"/>
 
-            <line ng-repeat="lineObj in lineObjects" ng-attr-x1="{{lineObj.x1}}" ng-attr-y1="{{lineObj.y1}}"
-                  ng-attr-x2="{{lineObj.x2}}" ng-attr-y2="{{lineObj.y2}}" stroke="blue" stroke-width="5"
-                  ng-click="handleLineClick($event)"/>
+        <line ng-repeat="lineObj in lineObjects" ng-attr-x1="{{lineObj.x1}}" ng-attr-y1="{{lineObj.y1}}"
+              ng-attr-x2="{{lineObj.x2}}" ng-attr-y2="{{lineObj.y2}}" stroke="blue" stroke-width="5"
+              ng-click="handleLineClick($event)"/>
 
-            <text ng-attr-x="{{textX}}" ng-attr-y="{{textY}}" fill="black" stroke-width="1">
-                {{svgObj.height}},{{svgPaper.clientWidth}} - {{currArcObj.radiusx}}
-            </text>
-        </svg>
+        <text ng-attr-x="{{textX}}" ng-attr-y="{{textY}}" fill="black" stroke-width="1">
+            {{svgObj.height}},{{svgPaper.clientWidth}} - {{currArcObj.radiusx}}
+        </text>
+    </svg>
+</div>
+<div id="editRegion" ng-mousemove="checkRightRailHover($event)" class="">
+
+    <div data-alert class="alert-box warning round" ng-show="(isFFox && !fFoxIsFunctional)">
+        This application does not currently work properly in FFox.
+        <a class="close">&times;</a>
+        <!--href="#"-->
     </div>
-    <div id="editRegion" ng-mousemove="checkRightRailHover($event)" class="">
-
-        <div data-alert class="alert-box warning round" ng-show="(isFFox && !fFoxIsFunctional)">
-            This application does not currently work properly in FFox.
-            <a  class="close">&times;</a>
-            <!--href="#"-->
-        </div>
-        <div id="coords" >
+    <div id="coords">
+        <div class="arc_params">
             <form name="newPointFormCurve" novalidate class="" ng-submit="submitAddForm()">
-                <div class="row" >
+                <div class="form_row row">
+                    <h3>Arc Parameters</h3>
+                </div>
+                <div class="form_row row">
                     <div class="large-6 columns">
                         <div class="label_container">
-                            <span class="">start X,Y:</span>
+                            <span class="">Start X,Y:</span>
                         </div>
                         <div class="double_number_container">
-                            <input type="number" ng-model="currArcObj.x1" class="newLineObjCont coord_input float_lft"
+                            <input type="number" ng-model="currArcObj.x1"
+                                   class="newLineObjCont coord_input float_lft"
                                    name="np_startX"
                                    ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
-                            <input type="number" ng-model="currArcObj.y1" class="newLineObjCont coord_input float_lft"
+                            <input type="number" ng-model="currArcObj.y1"
+                                   class="newLineObjCont coord_input float_lft"
                                    name="np_startY"
                                    ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                         </div>
                     </div>
                     <div class="large-6 columns">
                         <div class="label_container">
-                            <span class="">rad X,Y:</span>
+                            <span class="">Radius X,Y:</span>
                         </div>
                         <div class="double_number_container">
-                            <input type="number" ng-model="currArcObj.radiusx" class="newLineObjCont coord_input float_lft"
+                            <input type="number" ng-model="currArcObj.radiusx"
+                                   class="newLineObjCont coord_input float_lft"
                                    name="np_rx">
                             <!--ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()"-->
-                            <input type="number" ng-model="currArcObj.radiusy" class="newLineObjCont coord_input float_lft"
+                            <input type="number" ng-model="currArcObj.radiusy"
+                                   class="newLineObjCont coord_input float_lft"
                                    name="np_ry"
                                    ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                         </div>
                     </div>
                 </div>
-                <div class="editRowStyle row" >
+                <div class="form_row row">
+                    <div class="large-5 columns">
+                        <div class="label_container">
+                            <span class="">End X,Y:</span>
+                        </div>
+                        <div class="double_number_container">
+                            <input type="number" ng-model="currArcObj.x2"
+                                   class="newLineObjCont coord_input float_lft"
+                                   name="np_endX"
+                                   ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
+                            <input type="number" ng-model="currArcObj.y2"
+                                   class="newLineObjCont coord_input float_lft"
+                                   name="np_endY"
+                                   ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
+                        </div>
+                    </div>
                     <div class="large-3 columns">
                         <div class="label_container">
-                            <span class="">xRot:</span>
+                            <span class="">X Axis Rotation:</span>
                         </div>
-                        <input type="number" ng-model="currArcObj.angle" class="newLineObjCont coord_input float_lft"
+                        <input type="number" ng-model="currArcObj.angle"
+                               class="newLineObjCont coord_input float_lft"
                                name="np_xRot"
                                ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
                     <div class="large-4 columns">
                         <div class="label_container tall_form">
-                            <span class="float_lft">largeArc:</span>
-                            <input type="checkbox" ng-model="currArcObj.largeArcFlag" ng-true-value=1 ng-false-value=0>
+                            <span class="float_lft">LargeArc:</span>
+                            <input type="checkbox" ng-model="currArcObj.largeArcFlag" ng-true-value=1
+                                   ng-false-value=0>
                         </div>
                         <div class="label_container tall_form">
-                            <span class="float_lft">sweep:</span>
+                            <span class="float_lft">Sweep:</span>
                             <input type="checkbox" ng-model="currArcObj.sweepFlag" ng-true-value=1 ng-false-value=0>
-                        </div>
-                    </div>
-
-                    <div class="large-5 columns">
-                        <div class="label_container">
-                            <span class="">end X,Y:</span>
-                        </div>
-                        <div class="double_number_container">
-                            <input type="number" ng-model="currArcObj.x2" class="newLineObjCont coord_input float_lft"
-                                   name="np_endX"
-                                   ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
-                            <input type="number" ng-model="currArcObj.y2" class="newLineObjCont coord_input float_lft"
-                                   name="np_endY"
-                                   ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                         </div>
                     </div>
                     <div class="clearer"></div>
                 </div>
             </form>
+        </div>
+
+        <div class="line_params">
             <form name="newPointForm" novalidate class="" ng-submit="submitAddForm()">
-                <div class="row editRegionRowSub" >
+                <div class="form_row row">
+                    <h3>New Line Parameters</h3>
+                </div>
+                <div class="row form_row editRegionRowSub">
 
                     <div class="large-2 columns">
-                        x1:
+                        X1:
                         <input type="number" ng-model="newLineObj.x1" class="newLineObjCont coord_input" name="np_x1"
                                ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
                     <div class="large-2 columns">
-                        y1:
+                        Y1:
                         <input type="number" ng-model="newLineObj.y1" class="newLineObjCont coord_input" name="np_y1"
                                ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
                     <div class="large-1 columns">
                     </div>
                     <div class="large-2 columns">
-                        x2:
+                        X2:
                         <input type="number" ng-model="newLineObj.x2" class="newLineObjCont coord_input" name="np_x2"
                                ng-max="svgObj.width" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
                     <div class="large-2 columns">
-                        y2:
+                        Y2:
                         <input type="number" ng-model="newLineObj.y2" class="newLineObjCont coord_input" name="np_y2"
                                ng-max="svgObj.height" ng-min="0" ng-required=true ng-change="checkForm()">
                     </div>
-                    <div ng-show="( newPointForm.$pristine  && (!newPointForm.np_x1.$valid || !newPointForm.np_y1.$valid || !newPointForm.np_x2.$valid  || !newPointForm.np_y2.$valid ))" class="formAlert large-3 columns">
+                    <div ng-show="( newPointForm.$pristine  && (!newPointForm.np_x1.$valid || !newPointForm.np_y1.$valid || !newPointForm.np_x2.$valid  || !newPointForm.np_y2.$valid ))"
+                         class="formAlert large-3 columns">
                         <span class="ccError">Oops position out of bounds{{newPointForm.$pristine }}</span>
                     </div>
                     <div class="clearer"></div>
                 </div>
                 <div class="editRegionRow" ng-show="showPointsForm">
                     <div class="button_holder">
-                        <button type="button" id="submit" class="red_Button cancelButton add_point_button" ng-click="submitAddForm()">
+                        <button type="button" id="submit" class="red_Button cancelButton add_point_button"
+                                ng-click="submitAddForm()">
                             Add Line
                         </button>
                     </div>
                     <!--type="submit"-->
                 </div>
             </form>
-            <div class="XeditRegionRow row">
-                <div class="modes_region large-6 columns" ng-click="checkPathMode()">
+        </div>
+        <div class="XeditRegionRow row">
+            <div class="modes_region large-6 columns" ng-click="checkPathMode()">
 
-                    <rcp-radio selection="path"    label="Path Mode" selection-name="currentMode" is-checked="true"></rcp-radio>
-                    <rcp-radio selection="segment" label="Segment Mode" selection-name="currentMode" ></rcp-radio>
-                    <rcp-radio selection="convert" label="Convert Mode" selection-name="currentMode" ></rcp-radio>
-                    <button type="button" class="red_Button cancelButton add_point_button" ng-click="convertSegment()" ng-show="(drawMode == 'convert')">
-                        Convert Line
-                    </button>
-                    <div class="editRegionRow_short" ng-show="(drawMode == 'convert')" >Click on an existing line segment to convert to an arc.</div>
+                <rcp-radio selection="path" label="Path Mode" selection-name="currentMode"
+                           is-checked="true"></rcp-radio>
+                <rcp-radio selection="segment" label="Segment Mode" selection-name="currentMode"></rcp-radio>
+                <rcp-radio selection="convert" label="Convert Mode" selection-name="currentMode"></rcp-radio>
+                <button type="button" class="red_Button cancelButton add_point_button" ng-click="convertSegment()"
+                        ng-show="(drawMode == 'convert')">
+                    Convert Line
+                </button>
+                <div class="editRegionRow_short" ng-show="(drawMode == 'convert')">Click on an existing line segment
+                    to convert to an arc.
+                </div>
 
-                </div>
-                <div id="coordsList large-6 columns">
-                    <div ng-click="togglePointsTable()" class="tempButton">
-                        <a class="button tiny radius">{{ hidePointsLabel }}</a>
-                    </div>
-                    <table ng-show="hidePoints">
-                        <tr>
-                            <!--<th>step #</th>-->  <!--TODO: add counter?-->
-                            <th>x1</th>
-                            <th>y1</th>
-                            <th>x2</th>
-                            <th>y2</th>
-                        </tr>
-                        <tr ng-repeat="lineObj in lineObjects">
-                            <td> {{lineObj.x1}}</td>
-                            <td> {{lineObj.y1}}</td>
-                            <td> {{lineObj.x2}}</td>
-                            <td> {{lineObj.y2}}</td>
-                        </tr>
-                    </table>
-                </div>
             </div>
-            <div id="debug_region">
-
-                <!--<span>newLineObj.x2.$valid || newLineObj.y2.$valid : {{newLineObj.x2.$valid}} || {{newLineObj.y2.$valid }}</span>-->
-                <!--<span>newPointForm.np_x1.$valid || newPointForm.np_y1.$valid: {{newPointForm.np_x1.$valid}} || {{newPointForm.np_y1.$valid}}  </span>-->
-                <!--<span>newPointForm.$valid: {{newPointForm.$valid}} </span>-->
-
+            <div id="coordsList large-6 columns">
+                <div ng-click="togglePointsTable()" class="tempButton">
+                    <a class="button tiny radius">{{ hidePointsLabel }}</a>
+                </div>
+                <table ng-show="hidePoints">
+                    <tr>
+                        <!--<th>step #</th>-->  <!--TODO: add counter?-->
+                        <th>x1</th>
+                        <th>y1</th>
+                        <th>x2</th>
+                        <th>y2</th>
+                    </tr>
+                    <tr ng-repeat="lineObj in lineObjects">
+                        <td> {{lineObj.x1}}</td>
+                        <td> {{lineObj.y1}}</td>
+                        <td> {{lineObj.x2}}</td>
+                        <td> {{lineObj.y2}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
+        <div id="debug_region">
+
+            <!--<span>newLineObj.x2.$valid || newLineObj.y2.$valid : {{newLineObj.x2.$valid}} || {{newLineObj.y2.$valid }}</span>-->
+            <!--<span>newPointForm.np_x1.$valid || newPointForm.np_y1.$valid: {{newPointForm.np_x1.$valid}} || {{newPointForm.np_y1.$valid}}  </span>-->
+            <!--<span>newPointForm.$valid: {{newPointForm.$valid}} </span>-->
+
+        </div>
     </div>
+</div>
 </div>
