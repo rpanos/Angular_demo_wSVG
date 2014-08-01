@@ -16,10 +16,14 @@
       dismiss_modal_class: 'close-reveal-modal',
       bg_class: 'reveal-modal-bg',
       root_element: 'body',
-      open: function(){},
-      opened: function(){},
-      close: function(){},
-      closed: function(){},
+      open: function(){
+      },
+      opened: function(){
+      },
+      close: function(){
+      },
+      closed: function(){
+      },
       bg : $('.reveal-modal-bg'),
       css : {
         open : {
@@ -39,8 +43,6 @@
       $.extend(true, this.settings, method, options);
       this.bindings(method, options);
 
-        console.log("reveal init-ed!")
-
     },
 
     events : function (scope) {
@@ -51,7 +53,7 @@
         .off('.reveal')
         .on('click.fndtn.reveal', '[' + this.add_namespace('data-reveal-id') + ']:not([disabled])', function (e) {
           e.preventDefault();
-        
+
           if (!self.locked) {
             var element = S(this),
                 ajax = element.data(self.data_attr('reveal-ajax'));
@@ -141,6 +143,7 @@
     open : function (target, ajax_settings) {
       var self = this,
           modal;
+
 
       if (target) {
         if (typeof target.selector !== 'undefined') {

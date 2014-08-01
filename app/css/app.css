@@ -231,6 +231,9 @@ li.coordsText {
   /*width: 150px;*/
   height: 70px;
 }
+.points_button {
+    margin: 10px 5px 10px 5px;
+}
 .red_Button {
   background-color: rgba(237, 116, 116, 1);
   background-image: linear-gradient(top, rgba(238,130,130,1) 80%, rgba(213, 104,104,1) 100%);

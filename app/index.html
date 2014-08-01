@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="css/foundation-5.3.1/css/foundation.css">
 
     <script src="css/foundation-5.3.1/js/vendor/modernizr.js"></script>
+    <script src="css/foundation-5.3.1/js/vendor/jquery.js"></script>
+    <script src="css/foundation-5.3.1/js/vendor/fastclick.js"></script>
+    <script src="css/foundation-5.3.1/js/foundation.min.js"></script>
+    <script src="css/foundation-5.3.1/js/foundation/foundation.reveal.js"></script>
+
 
   <link rel="stylesheet" href="css/app.css"/>
 </head>
@@ -37,11 +42,19 @@
   <script src="js/directives.js"></script>
 
 
-  <script src="css/foundation-5.3.1/js/vendor/jquery.js"></script>
-  <script src="css/foundation-5.3.1/js/vendor/fastclick.js"></script>
-  <script src="css/foundation-5.3.1/js/foundation.min.js"></script>
+  <div id="myModalLink" class="reveal-modal" data-reveal="">
+      <h2>A Brief Explanation</h2>
+
+      <p>There is a need to transform text drawn in SVG into “Arc text” such that the lowest line segments become arcs of the same circular path.  So the purpose of this application is to experiment with turning line segments into arcs.</p>
+      <p>Many features remain incomplete, but for now you can draw lines and then move to conversion mode.  By selecting a line segment and then pressing "convert line", the line becomes an arc.  From there you can tweak the arc parameters.</p>
+
+      <a class="close-reveal-modal">&#215;</a>
+  </div>
+
+
   <script type="text/javascript">
       $(document).foundation();
   </script>
+
 </body>
 </html>

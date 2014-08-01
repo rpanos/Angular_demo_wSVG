@@ -35,6 +35,9 @@
         <a class="close">&times;</a>
         <!--href="#"-->
     </div>
+
+    <a preventDefault data-reveal-id="myModalLink"class="button tiny radius">A Brief Explanation</a>
+
     <div id="coords">
         <div class="arc_params">
             <form name="newPointFormCurve" novalidate class="" ng-submit="submitAddForm()">
@@ -177,7 +180,7 @@
 
             </div>
             <div id="coordsList large-6 columns">
-                <div ng-click="togglePointsTable()" class="tempButton">
+                <div ng-click="togglePointsTable()" class="points_button">
                     <a class="button tiny radius">{{ hidePointsLabel }}</a>
                 </div>
                 <table ng-show="hidePoints">

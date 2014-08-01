@@ -153,22 +153,21 @@ angular.module('myApp.controllers', []).
 
             $scope.resetSizeAtt = function () {
                 // NOTE: The user can change the size!
-                $scope.svgObj.width = $scope.svgPaper.clientWidth;
-                $scope.svgObj.height = $scope.svgPaper.clientHeight;
 
-                $scope.textX = $scope.svgPaper.clientWidth - 190;
-                $scope.textY = $scope.svgPaper.clientHeight - 125;
+                if (typeof($scope.svgObj) != "undefined") {
+
+
+                    $scope.svgObj.width = $scope.svgPaper.clientWidth;
+                    $scope.svgObj.height = $scope.svgPaper.clientHeight;
+
+                    $scope.textX = $scope.svgPaper.clientWidth - 190;
+                    $scope.textY = $scope.svgPaper.clientHeight - 125;
+                }
 //
             };
 
             $scope.init = function() {
-                //move to a service?
-                $scope.svgObj = {
-                    width: '100%',
-                    height: '650px',
-                    strkColor: "grey",
-                    strkWdth: 5
-                };
+
                 $scope.guide = arcCalcService.initGuide;
                 $scope.currArcObj = arcCalcService.giveInitArc();
 
@@ -202,6 +201,14 @@ angular.module('myApp.controllers', []).
             };
 
             angular.element(document).ready(function () {
+                //move to a service?
+                $scope.svgObj = {
+                    width: '100%',
+                    height: '650px',
+                    strkColor: "grey",
+                    strkWdth: 5
+                };
+
                 $scope.resetFromPathMode();
                 $scope.svgPaper = angular.element(document.body.querySelector("#paper"))[0];
                 $scope.resetSizeAtt();
