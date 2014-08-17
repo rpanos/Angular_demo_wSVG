@@ -1,0 +1,10 @@
+
+
+SVG Demo TODO
+
+- AWESOME DOCS
+- Flip mode for uppper arcs?
+- STYLE!!!
+- directive for mode?
+	- Click, drag, convert?
+

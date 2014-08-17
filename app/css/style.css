@@ -1,0 +1,7 @@
+.double_number_container {
+  min-width: 90px;
+  max-width: 120px;
+  height: 45px; }
+  .double_number_container .coord_input {
+    max-width: 60px;
+    margin: 8px 0 12px 0; }
