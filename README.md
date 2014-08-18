@@ -16,3 +16,10 @@ You can pick one of these options:
 Then navigate your browser to `http://localhost:<port>/app/index.html` to see the app running in
 your browser.
 
+To utilize the jasmine tests, run "npm install" to be sure you have all dependencies.  Then read more good things from the wise developer that shared his angular seed project here:
+
+https://github.com/angular/angular-seed.
+
+If you happen to have a $@#% Windows machine and you are having issues, you also have the option of running test.bat in the scripts directory, but you will also need to install karma command line:
+
+https://www.npmjs.org/package/karma-cli

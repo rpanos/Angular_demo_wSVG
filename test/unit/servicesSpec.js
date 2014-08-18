@@ -25,6 +25,9 @@ describe('service', function () {
 
         });
 
+        // Do some expects with ranges 0-1500 in px or -2Pi to 2pi?  half Pi?
+
+
     });
 
 //
