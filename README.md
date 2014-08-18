@@ -23,3 +23,9 @@ https://github.com/angular/angular-seed.
 If you happen to have a $@#% Windows machine and you are having issues, you also have the option of running test.bat in the scripts directory, but you will also need to install karma command line:
 
 https://www.npmjs.org/package/karma-cli
+
+To have the sass converted to css automatically, ONE option is to run:
+
+sass --watch stayle.scss:stayle.css
+
+from the css dir.  Of course, you need to install sass.
